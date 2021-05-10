@@ -12,7 +12,7 @@ class LoginController extends Controller
     function login (Request $request) {
         $data = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required|min:6'
         ]);
         if (Auth::attempt($request->only('email', 'password'))) {
             return response()->json('', 204);

@@ -26,7 +26,6 @@
                     </div>
                 </form>
             </div>
-            <button class="btn btn-secondary" onclick="location.href='/'">Powrót</button>
         </div>
     </div>
 </template>

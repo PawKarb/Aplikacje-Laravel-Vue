@@ -57,6 +57,7 @@
         },
         methods:{
             async sendRegister(){
+                this.errors = {};
                 await axios.get("/sanctum/csrf-cookie");
                 await axios.post("/api/register", this.registerData).then(response=>{
                     this.registerData = {};
