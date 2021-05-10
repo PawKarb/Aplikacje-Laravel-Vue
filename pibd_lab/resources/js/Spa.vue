@@ -1,6 +1,8 @@
 <template>
     <div>
-        <h1>Witaj na stronie</h1>
+        <h1>Laboratorium PIBD</h1>
+        <navigation/>
+        <router-view></router-view>
     </div>
 </template>
 <style scoped>
@@ -9,5 +11,7 @@
     }
 </style>
 <script>
-    export default { }
+import Navigation from './components/Navigation.vue'
+    export default {
+  components: { Navigation }, }
 </script>
