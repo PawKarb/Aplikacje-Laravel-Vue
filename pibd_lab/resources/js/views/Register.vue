@@ -54,6 +54,26 @@
                 },
                 errors:{}
             }
+        },
+        methods:{
+            async sendRegister(){
+                await axios.get("/sanctum/csrf-cookie");
+                await axios.post("/api/register", this.registerData).then(response=>{
+                    this.registerData = {};
+                    this.$router.push({name: 'login'});
+                    this.$toasted.success("Zarejestrowano pomyślnie, teraz możesz się zalogować",{
+                        action : {
+                            text : 'OK',
+                            onClick : (e, toastObject) => {
+                                toastObject.goAway(0);
+                            }
+                        }
+                    });
+                }).catch(error=>{
+                    if (error.response.status === 422) {
+                    this.errors = error.response.data.errors || {};
+                }});
+            }
         }
     }
 </script>

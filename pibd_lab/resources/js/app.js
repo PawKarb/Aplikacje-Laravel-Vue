@@ -6,6 +6,10 @@
 import Vue from 'vue';
 import Spa from './Spa.vue';
 import router from './router';
+import Toasted from 'vue-toasted';
+
+Vue.use(Toasted)
+
 require('./bootstrap');
 
 /**
