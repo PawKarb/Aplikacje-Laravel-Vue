@@ -2,8 +2,8 @@
     <div id="navigation-buttons">
         <router-link class="btn btn-sm btn-outline-secondary" :to="{ name: 'home' }" tag="button" >Home</router-link>
         <router-link v-if="isLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'dashboard' }" tag="button">Dashboard</router-link>
-        <router-link v-if="!isLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'login' }" tag="button">Login</router-link>
-        <router-link v-if="!isLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'register' }" tag="button">Register</router-link><br/>
+        <router-link v-if="!isLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'login' }" tag="button">Logowanie</router-link>
+        <router-link v-if="!isLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'register' }" tag="button">Rejestracja</router-link><br/>
         <button v-if="isLogged" class="btn btn-danger" @click.prevent="logout()">Wyloguj się</button>
     </div>
 </template>

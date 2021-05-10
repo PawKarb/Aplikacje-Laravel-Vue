@@ -1935,6 +1935,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  created: function created() {
+    var _this = this;
+
+    axios.interceptors.response.use(function (response) {
+      return response;
+    }, function (error) {
+      if (error.response.status === 401) {
+        localStorage.removeItem("isLogged");
+
+        _this.$root.$emit("isLogged", false);
+
+        if (_this.$route.path != "/login") {
+          _this.$router.push({
+            name: "login"
+          });
+        }
+      }
+
+      return Promise.reject(error);
+    });
+  },
   components: {
     Navigation: _components_Navigation_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   }
@@ -39689,7 +39710,7 @@ var render = function() {
               staticClass: "btn btn-sm btn-outline-secondary",
               attrs: { to: { name: "login" }, tag: "button" }
             },
-            [_vm._v("Login")]
+            [_vm._v("Logowanie")]
           )
         : _vm._e(),
       _vm._v(" "),
@@ -39700,7 +39721,7 @@ var render = function() {
               staticClass: "btn btn-sm btn-outline-secondary",
               attrs: { to: { name: "register" }, tag: "button" }
             },
-            [_vm._v("Register")]
+            [_vm._v("Rejestracja")]
           )
         : _vm._e(),
       _c("br"),
