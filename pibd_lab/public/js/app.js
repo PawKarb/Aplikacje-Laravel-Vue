@@ -1974,9 +1974,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      isLogged: null
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    this.isLogged = localStorage.getItem("isLogged");
+    this.$root.$on("isLogged", function (value) {
+      _this.isLogged = value;
+    });
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.$root.$off("isLogged");
+  },
   methods: {
     logout: function logout() {
-      var _this = this;
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
@@ -1985,11 +2001,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.next = 2;
                 return axios.post("/api/logout").then(function (response) {
-                  _this.$router.push({
+                  localStorage.removeItem("isLogged");
+                  _this2.isLogged = false;
+
+                  _this2.$router.push({
                     name: 'home'
                   });
 
-                  _this.$toasted.success("Wylogowano pomyślnie!!!", {
+                  _this2.$toasted.success("Wylogowano pomyślnie!!!", {
                     action: {
                       text: 'OK',
                       onClick: function onClick(e, toastObject) {
@@ -2135,7 +2154,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 3:
                 _context.next = 5;
                 return axios.post("/api/login", _this.loginData).then(function (response) {
+                  localStorage.setItem("isLogged", "true");
                   _this.loginData = {};
+
+                  _this.$root.$emit("isLogged", true);
 
                   _this.$router.push({
                     name: 'dashboard'
@@ -39598,47 +39620,55 @@ var render = function() {
         [_vm._v("Home")]
       ),
       _vm._v(" "),
-      _c(
-        "router-link",
-        {
-          staticClass: "btn btn-sm btn-outline-secondary",
-          attrs: { to: { name: "dashboard" }, tag: "button" }
-        },
-        [_vm._v("Dashboard")]
-      ),
+      _vm.isLogged
+        ? _c(
+            "router-link",
+            {
+              staticClass: "btn btn-sm btn-outline-secondary",
+              attrs: { to: { name: "dashboard" }, tag: "button" }
+            },
+            [_vm._v("Dashboard")]
+          )
+        : _vm._e(),
       _vm._v(" "),
-      _c(
-        "router-link",
-        {
-          staticClass: "btn btn-sm btn-outline-secondary",
-          attrs: { to: { name: "login" }, tag: "button" }
-        },
-        [_vm._v("Login")]
-      ),
+      !_vm.isLogged
+        ? _c(
+            "router-link",
+            {
+              staticClass: "btn btn-sm btn-outline-secondary",
+              attrs: { to: { name: "login" }, tag: "button" }
+            },
+            [_vm._v("Login")]
+          )
+        : _vm._e(),
       _vm._v(" "),
-      _c(
-        "router-link",
-        {
-          staticClass: "btn btn-sm btn-outline-secondary",
-          attrs: { to: { name: "register" }, tag: "button" }
-        },
-        [_vm._v("Register")]
-      ),
+      !_vm.isLogged
+        ? _c(
+            "router-link",
+            {
+              staticClass: "btn btn-sm btn-outline-secondary",
+              attrs: { to: { name: "register" }, tag: "button" }
+            },
+            [_vm._v("Register")]
+          )
+        : _vm._e(),
       _c("br"),
       _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-danger",
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.logout()
-            }
-          }
-        },
-        [_vm._v("Wyloguj się")]
-      )
+      _vm.isLogged
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-danger",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.logout()
+                }
+              }
+            },
+            [_vm._v("Wyloguj się")]
+          )
+        : _vm._e()
     ],
     1
   )
@@ -55680,20 +55710,65 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   }, {
     name: 'login',
     path: '/login',
-    component: _views_Login_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    component: _views_Login_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    meta: {
+      guestOnly: true
+    }
   }, {
     name: 'dashboard',
     path: '/dashboard',
-    component: _views_Dashboard_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+    component: _views_Dashboard_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    meta: {
+      requiresAuth: true
+    }
   }, {
     name: 'register',
     path: '/register',
-    component: _views_Register_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+    component: _views_Register_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+    meta: {
+      guestOnly: true
+    }
   }, {
     path: '*',
     redirect: "/"
   }]
 });
+router.beforeEach(function (to, from, next) {
+  if (to.matched.some(function (record) {
+    return record.meta.requiresAuth;
+  })) {
+    if (!isLogged()) {
+      next({
+        path: '/login',
+        query: {
+          redirect: to.fullPath
+        }
+      });
+    } else {
+      next();
+    }
+  } else if (to.matched.some(function (record) {
+    return record.meta.guestOnly;
+  })) {
+    if (isLogged()) {
+      next({
+        path: '/dashboard',
+        query: {
+          redirect: to.fullPath
+        }
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
+function isLogged() {
+  return localStorage.getItem("isLogged");
+}
+
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
 /***/ }),

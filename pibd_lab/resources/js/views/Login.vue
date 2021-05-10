@@ -46,7 +46,9 @@
                 this.errors = {};
                 await axios.get("/sanctum/csrf-cookie");
                 await axios.post("/api/login", this.loginData).then(response=>{
+                    localStorage.setItem("isLogged", "true");
                     this.loginData = {};
+                    this.$root.$emit("isLogged", true);
                     this.$router.push({name: 'dashboard'});
                     this.$toasted.success("Zalogowano pomyślnie!!!",{
                         action : {
@@ -58,8 +60,9 @@
                     });
                 }).catch(error =>{
                     if (error.response.status === 422) {
-                    this.errors = error.response.data.errors || {};
-                }});
+                        this.errors = error.response.data.errors || {};
+                    }
+                });
             }
         }
     }
