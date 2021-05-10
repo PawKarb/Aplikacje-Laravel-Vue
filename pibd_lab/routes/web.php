@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [MainController::class, 'index'])->where('any','.*');
+Route::get('{any}', [MainController::class, 'index'])->where('any','.*');
