@@ -38,9 +38,7 @@
     </div>
 </template>
 <style scoped>
-    h2{
-        text-align: center;
-    }
+
 </style>
 <script>
     export default {
@@ -68,12 +66,18 @@
                             onClick : (e, toastObject) => {
                                 toastObject.goAway(0);
                             }
-                        }
+                        },
+                        duration: 8000,
+                        icon: 'account_circle',
+                        position: "bottom-right",
                     });
                 }).catch(error=>{
                     if (error.response.status === 422) {
-                    this.errors = error.response.data.errors || {};
-                }});
+                        this.errors = error.response.data.errors || {};
+                    }else{
+                        console.log(error);
+                    }
+                });
             }
         }
     }

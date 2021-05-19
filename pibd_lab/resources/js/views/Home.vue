@@ -1,12 +1,11 @@
 <template>
-    <div>
+    <div class="text-center">
         <h2>Strona główna</h2>
+        <h5>Witaj na stronie głownej</h5>
     </div>
 </template>
 <style scoped>
-    h2{
-        text-align: center;
-    }
+
 </style>
 <script>
     export default { }
