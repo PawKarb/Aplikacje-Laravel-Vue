@@ -37,7 +37,7 @@
 
                     });
                 }).catch(error=>{
-                    console.log(error);
+                    this.$store.commit("setError", error.message);
                 });
             }
         },

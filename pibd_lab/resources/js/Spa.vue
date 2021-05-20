@@ -3,12 +3,14 @@
         <h1 class="text-center">Laboratorium PIBD</h1>
         <navigation/>
         <router-view></router-view>
+        <error-modal />
     </div>
 </template>
 <style scoped>
 </style>
 <script>
-import Navigation from './components/Navigation.vue'
+import Navigation from './components/Navigation.vue';
+import ErrorModal from './components/Error.vue';
     export default {
         created() {
             axios.interceptors.response.use(response => {return response},error => {
@@ -20,7 +22,7 @@ import Navigation from './components/Navigation.vue'
                 }
                 return Promise.reject(error);
             });
-    },
-        components: { Navigation },
+        },
+        components: { Navigation, ErrorModal},
     }
 </script>

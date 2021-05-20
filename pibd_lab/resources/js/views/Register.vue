@@ -75,7 +75,7 @@
                     if (error.response.status === 422) {
                         this.errors = error.response.data.errors || {};
                     }else{
-                        console.log(error);
+                        this.$store.commit("setError", error.message);
                     }
                 });
             }

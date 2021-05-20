@@ -4,7 +4,7 @@ import router from './router';
 import Toasted from 'vue-toasted';
 import store from './store';
 
-Vue.use(Toasted)
+Vue.use(Toasted);
 
 require('./bootstrap');
 
