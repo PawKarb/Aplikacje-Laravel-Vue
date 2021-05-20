@@ -1,10 +1,10 @@
 <template>
     <div id="navigation-buttons">
         <router-link class="btn btn-sm btn-outline-secondary" :to="{ name: 'home' }" tag="button" >Home</router-link>
-        <router-link v-if="isLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'dashboard' }" tag="button">Dashboard</router-link>
-        <router-link v-if="!isLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'login' }" tag="button">Logowanie</router-link>
-        <router-link v-if="!isLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'register' }" tag="button">Rejestracja</router-link>
-        <button v-if="isLogged" class="btn btn-danger float-right btn-logout" @click.prevent="logout()">Wyloguj się</button>
+        <router-link v-if="catchLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'dashboard' }" tag="button">Dashboard</router-link>
+        <router-link v-if="!catchLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'login' }" tag="button">Logowanie</router-link>
+        <router-link v-if="!catchLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'register' }" tag="button">Rejestracja</router-link>
+        <button v-if="catchLogged" class="btn btn-danger float-right btn-logout" @click.prevent="logout()">Wyloguj się</button>
     </div>
 </template>
 <style scoped>
@@ -19,18 +19,10 @@
 </style>
 <script>
     export default {
-        data() {
-            return { isLogged: null};
-        },
-        created() {
-            //this.isLogged = localStorage.getItem("isLogged");
-            this.isLogged = this.$store.state.isLogged;
-        },
         methods:{
             async logout(){
                 await axios.post("/api/logout").then(response=>{
-                    localStorage.removeItem("isLogged");
-                    this.$store.commit('toggleLogged', 'false');
+                    this.$store.commit('toggleLogged', false);
                     this.$router.push({name: 'home'});
                     this.$toasted.success("Wylogowano pomyślnie!!!",{
                         action : {
@@ -48,6 +40,11 @@
                     console.log(error);
                 });
             }
-        }
+        },
+        computed:{
+            catchLogged(){
+                return this.$store.getters.isLogged;
+            }
+        },
     }
 </script>

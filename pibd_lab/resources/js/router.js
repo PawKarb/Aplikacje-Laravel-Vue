@@ -4,6 +4,7 @@ import Home from './views/Home.vue';
 import Login from './views/Login.vue';
 import Dashboard from './views/Dashboard.vue';
 import Register from './views/Register.vue';
+import store from './store';
 
 Vue.use(VueRouter);
 
@@ -36,7 +37,7 @@ const router = new VueRouter({
         });
 
     function isLogged() {
-        return localStorage.getItem("isLogged");
+        return store.getters.isLogged;
     }
 
 export default router;
