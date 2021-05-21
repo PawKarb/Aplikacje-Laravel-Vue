@@ -13,6 +13,9 @@ class LoginController extends Controller
         $data = $request->validate([
             'email' => 'required|email|exists:users',
             'password' => 'required|min:6'
+        ],[
+            'email.required' =>'Email jest wymagany!',
+            'password.required' =>'Hasło jest wymagane!',
         ]);
         if (Auth::attempt($request->only('email', 'password'))) {
             return response()->json('', 204);
@@ -25,10 +28,18 @@ class LoginController extends Controller
     }
     public function register(Request $request){
         $request->validate([
-            'name'=> 'required',
+            'name'=> 'required|min:3|max:30|unique:users',
             'email'=> 'required|email|unique:users',
             'password'=> 'required|min:6|confirmed',
-            'password_confirmation'=> 'required|min:6',
+            'password_confirmation'=> 'required',
+        ],
+        [
+            'name.unique'=>'Podana nazwa użytkownika już istnieje!',
+            'name.required'=>'Nazwa użytkownika jest wymagana!',
+            'email.unique'=>'Podany adres email już istnieje!',
+            'email.required' =>'Email jest wymagany!',
+            'password.required' =>'Hasło jest wymagane!',
+            'password_confirmation.required' =>'Powtórz hasło jest wymagane!',
         ]);
         User::create([
             'name'=>$request->name,
