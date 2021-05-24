@@ -2281,6 +2281,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2289,7 +2296,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         email: null,
         password: null
       },
-      errors: {}
+      errors: {},
+      submitStatus: null
     };
   },
   methods: {
@@ -2302,11 +2310,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _this.errors = {};
-                _context.next = 3;
+
+                _this.$v.$touch();
+
+                if (!_this.$v.$invalid) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _this.submitStatus = 'ERROR';
+                _context.next = 11;
+                break;
+
+              case 6:
+                _this.submitStatus = null;
+                _context.next = 9;
                 return axios.get("/sanctum/csrf-cookie");
 
-              case 3:
-                _context.next = 5;
+              case 9:
+                _context.next = 11;
                 return axios.post("/api/login", _this.loginData).then(function (response) {
                   _this.$store.commit("toggleLogged", true);
 
@@ -2330,12 +2352,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 })["catch"](function (error) {
                   if (error.response.status === 422) {
                     _this.errors = error.response.data.errors || {};
+                  } else if (error.response.status === 401) {
+                    _this.submitStatus = 'UNAUTHORIZED';
                   } else {
                     _this.$store.commit("setError", error.message);
                   }
                 });
 
-              case 5:
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -2444,6 +2468,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2454,7 +2482,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         password: null,
         password_confirmation: null
       },
-      errors: {}
+      errors: {},
+      submitStatus: null
     };
   },
   methods: {
@@ -2467,11 +2496,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _this.errors = {};
-                _context.next = 3;
+
+                _this.$v.$touch();
+
+                if (!_this.$v.$invalid) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _this.submitStatus = 'ERROR';
+                _context.next = 11;
+                break;
+
+              case 6:
+                _this.submitStatus = null;
+                _context.next = 9;
                 return axios.get("/sanctum/csrf-cookie");
 
-              case 3:
-                _context.next = 5;
+              case 9:
+                _context.next = 11;
                 return axios.post("/api/register", _this.registerData).then(function (response) {
                   _this.registerData = {};
 
@@ -2498,7 +2541,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 });
 
-              case 5:
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -39986,13 +40029,7 @@ var render = function() {
                 !_vm.$v.loginData.email.email
                   ? _c("span", [_vm._v("To pole musi być adresem email!")])
                   : _vm._e()
-              ]),
-              _vm._v(" "),
-              _vm.errors && _vm.errors.email
-                ? _c("span", { staticClass: "text-danger" }, [
-                    _vm._v(_vm._s(_vm.errors.email[0]))
-                  ])
-                : _vm._e()
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
@@ -40048,14 +40085,55 @@ var render = function() {
                       )
                     ])
                   : _vm._e()
-              ]),
-              _vm._v(" "),
-              _vm.errors && _vm.errors.password
-                ? _c("span", { staticClass: "text-danger" }, [
-                    _vm._v(_vm._s(_vm.errors.password[0]))
-                  ])
-                : _vm._e()
+              ])
             ]),
+            _vm._v(" "),
+            _vm.submitStatus === "ERROR"
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Prosimy o poprawne wypełnienie formularza.\n                "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.submitStatus === "UNAUTHORIZED"
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Niepoprawny email lub hasło.\n                "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.errors && _vm.errors.email
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm.errors.email[0]) +
+                        "\n                "
+                    )
+                  ]
+                )
+              : _vm._e(),
             _vm._v(" "),
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-md-6" }, [
@@ -40189,13 +40267,7 @@ var render = function() {
                       )
                     ])
                   : _vm._e()
-              ]),
-              _vm._v(" "),
-              _vm.errors && _vm.errors.name
-                ? _c("span", { staticClass: "text-danger" }, [
-                    _vm._v(_vm._s(_vm.errors.name[0]))
-                  ])
-                : _vm._e()
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
@@ -40239,13 +40311,7 @@ var render = function() {
                 !_vm.$v.registerData.email.email
                   ? _c("span", [_vm._v("To pole musi być adresem email!")])
                   : _vm._e()
-              ]),
-              _vm._v(" "),
-              _vm.errors && _vm.errors.email
-                ? _c("span", { staticClass: "text-danger" }, [
-                    _vm._v(_vm._s(_vm.errors.email[0]))
-                  ])
-                : _vm._e()
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
@@ -40297,13 +40363,7 @@ var render = function() {
                       )
                     ])
                   : _vm._e()
-              ]),
-              _vm._v(" "),
-              _vm.errors && _vm.errors.password
-                ? _c("span", { staticClass: "text-danger" }, [
-                    _vm._v(_vm._s(_vm.errors.password[0]))
-                  ])
-                : _vm._e()
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
@@ -40362,6 +40422,7 @@ var render = function() {
                       )
                     ])
                   : _vm._e(),
+                _c("br"),
                 _vm._v(" "),
                 !_vm.$v.registerData.password_confirmation.sameAs
                   ? _c("span", [
@@ -40370,14 +40431,57 @@ var render = function() {
                       )
                     ])
                   : _vm._e()
-              ]),
-              _vm._v(" "),
-              _vm.errors && _vm.errors.password_confirmation
-                ? _c("span", { staticClass: "text-danger" }, [
-                    _vm._v(_vm._s(_vm.errors.password_confirmation[0]))
-                  ])
-                : _vm._e()
+              ])
             ]),
+            _vm._v(" "),
+            _vm.submitStatus === "ERROR"
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                     Prosimy o poprawne wypełnienie formularza.\n                 "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.errors && _vm.errors.name
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                     " +
+                        _vm._s(_vm.errors.name[0]) +
+                        "\n                 "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.errors && _vm.errors.email
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                     " +
+                        _vm._s(_vm.errors.email[0]) +
+                        "\n                 "
+                    )
+                  ]
+                )
+              : _vm._e(),
             _vm._v(" "),
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "text-center" }, [

@@ -13,7 +13,6 @@
                             <span v-if="!$v.registerData.name.minLength">Twoja nazwa nie może być krótsza niż {{$v.registerData.name.$params.minLength.min}} znaki</span>
                             <span v-if="!$v.registerData.name.maxLength">Twoja nazwa nie może być dłuższa niż {{$v.registerData.name.$params.maxLength.max}} znaków</span>
                         </div>
-                        <span v-if="errors && errors.name" class="text-danger">{{ errors.name[0] }}</span>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
@@ -23,7 +22,6 @@
                             <span v-if="!$v.registerData.email.required">To pole jest wymagane!</span>
                             <span v-if="!$v.registerData.email.email">To pole musi być adresem email!</span>
                         </div>
-                        <span v-if="errors && errors.email" class="text-danger">{{ errors.email[0] }}</span>
                     </div>
                     <div class="form-group">
                         <label for="password">Hasło</label>
@@ -33,7 +31,6 @@
                             <span v-if="!$v.registerData.password.required">To pole jest wymagane!</span>
                             <span v-if="!$v.registerData.password.minLength">Pole 'Hasło' musi mieć min - {{$v.registerData.password.$params.minLength.min}} znaków!</span>
                         </div>
-                        <span v-if="errors && errors.password" class="text-danger">{{ errors.password[0] }}</span>
                     </div>
                     <div class="form-group">
                         <label for="password_confirmation">Powtórz hasło</label>
@@ -41,11 +38,18 @@
                             :class="{'is-invalid': $v.registerData.password_confirmation.$error, 'is-valid': !$v.registerData.password_confirmation.$invalid}"/>
                         <div class="invalid-feedback">
                             <span v-if="!$v.registerData.password_confirmation.required">To pole jest wymagane!</span>
-                            <span v-if="!$v.registerData.password_confirmation.minLength">Pole 'Powtórz hasło' musi mieć min - {{$v.registerData.password_confirmation.$params.minLength.min}} znaków!</span>
+                            <span v-if="!$v.registerData.password_confirmation.minLength">Pole 'Powtórz hasło' musi mieć min - {{$v.registerData.password_confirmation.$params.minLength.min}} znaków!</span><br/>
                             <span v-if="!$v.registerData.password_confirmation.sameAs">Pole 'Powtórz hasło' musi być takie samo jak pole 'Hasło!'</span>
                         </div>
-                        <span v-if="errors && errors.password_confirmation" class="text-danger">{{ errors.password_confirmation[0] }}</span>
-
+                    </div>
+                    <div v-if="submitStatus === 'ERROR'" class="alert alert-danger" role="alert">
+                        Prosimy o poprawne wypełnienie formularza.
+                    </div>
+                    <div v-if="errors && errors.name" class="alert alert-danger" role="alert">
+                        {{ errors.name[0] }}
+                    </div>
+                    <div v-if="errors && errors.email" class="alert alert-danger" role="alert">
+                        {{ errors.email[0] }}
                     </div>
                     <div class="row">
                         <div class="text-center">
@@ -74,34 +78,41 @@ import { required, minLength, email, maxLength, sameAs } from 'vuelidate/lib/val
                     password: null,
                     password_confirmation: null,
                 },
-                errors:{}
+                errors:{},
+                submitStatus: null,
             }
         },
         methods:{
             async sendRegister(){
                 this.errors = {};
-                await axios.get("/sanctum/csrf-cookie");
-                await axios.post("/api/register", this.registerData).then(response=>{
-                    this.registerData = {};
-                    this.$router.push({name: 'login'});
-                    this.$toasted.success("Zarejestrowano pomyślnie, teraz możesz się zalogować",{
-                        action : {
-                            text : 'OK',
-                            onClick : (e, toastObject) => {
-                                toastObject.goAway(0);
-                            }
-                        },
-                        duration: 8000,
-                        icon: 'account_circle',
-                        position: "bottom-right",
+                this.$v.$touch();
+                if (this.$v.$invalid) {
+                    this.submitStatus = 'ERROR'
+                }else{
+                    this.submitStatus = null;
+                    await axios.get("/sanctum/csrf-cookie");
+                    await axios.post("/api/register", this.registerData).then(response=>{
+                        this.registerData = {};
+                        this.$router.push({name: 'login'});
+                        this.$toasted.success("Zarejestrowano pomyślnie, teraz możesz się zalogować",{
+                            action : {
+                                text : 'OK',
+                                onClick : (e, toastObject) => {
+                                    toastObject.goAway(0);
+                                }
+                            },
+                            duration: 8000,
+                            icon: 'account_circle',
+                            position: "bottom-right",
+                        });
+                    }).catch(error=>{
+                        if (error.response.status === 422) {
+                            this.errors = error.response.data.errors || {};
+                        }else{
+                            this.$store.commit("setError", error.message);
+                        }
                     });
-                }).catch(error=>{
-                    if (error.response.status === 422) {
-                        this.errors = error.response.data.errors || {};
-                    }else{
-                        this.$store.commit("setError", error.message);
-                    }
-                });
+                }
             }
         },
         validations:{
