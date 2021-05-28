@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Spa from './Spa.vue';
 import router from './router';
 import Toasted from 'vue-toasted';
-import store from './store';
+import store from '../store';
 import Vuelidate from 'vuelidate';
 
 Vue.use(Vuelidate);

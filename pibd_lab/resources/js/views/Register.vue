@@ -38,8 +38,8 @@
                             :class="{'is-invalid': $v.registerData.password_confirmation.$error, 'is-valid': !$v.registerData.password_confirmation.$invalid}"/>
                         <div class="invalid-feedback">
                             <span v-if="!$v.registerData.password_confirmation.required">To pole jest wymagane!</span>
-                            <span v-if="!$v.registerData.password_confirmation.minLength">Pole 'Powtórz hasło' musi mieć min - {{$v.registerData.password_confirmation.$params.minLength.min}} znaków!</span><br/>
-                            <span v-if="!$v.registerData.password_confirmation.sameAs">Pole 'Powtórz hasło' musi być takie samo jak pole 'Hasło!'</span>
+                            <span v-if="!$v.registerData.password_confirmation.minLength">Hasło musi mieć min - {{$v.registerData.password_confirmation.$params.minLength.min}} znaków!</span><br/>
+                            <span v-if="!$v.registerData.password_confirmation.sameAs">Hasła nie są takie same!</span>
                         </div>
                     </div>
                     <div v-if="submitStatus === 'ERROR'" class="alert alert-danger" role="alert">
@@ -87,7 +87,7 @@ import { required, minLength, email, maxLength, sameAs } from 'vuelidate/lib/val
                 this.errors = {};
                 this.$v.$touch();
                 if (this.$v.$invalid) {
-                    this.submitStatus = 'ERROR'
+                    this.submitStatus = 'ERROR';
                 }else{
                     this.submitStatus = null;
                     await axios.get("/sanctum/csrf-cookie");
@@ -109,7 +109,7 @@ import { required, minLength, email, maxLength, sameAs } from 'vuelidate/lib/val
                         if (error.response.status === 422) {
                             this.errors = error.response.data.errors || {};
                         }else{
-                            this.$store.commit("setError", error.message);
+                            this.$store.commit("errorState/setError", error.message);
                         }
                     });
                 }

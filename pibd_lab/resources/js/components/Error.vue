@@ -42,24 +42,26 @@ export default {
   },
   computed:{
     catchError(){
-      this.isError = this.$store.getters.getError;
-      return this.$store.getters.getError;
+      this.isError = this.$store.getters['errorState/getError'];
+      return this.$store.getters['errorState/getError'];
     }
   },
   methods:{
     hideNormal(){
-      this.$store.commit("setError", null);
       this.isError = null;
+      this.$store.commit('errorState/setError', null);
     },
     hideRedirect(){
-      this.$store.commit("setError", null);
       this.isError = null;
+      this.$store.commit('errorState/setError', null);
       this.$router.push('/');
     }
   },
   watch:{
     isError: function(){
-      $("#error-modal").modal('show');
+        if(this.isError !== null){
+            $("#error-modal").modal('show');
+        }
     }
   }
 }

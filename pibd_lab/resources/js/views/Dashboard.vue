@@ -22,7 +22,7 @@
                     let user = await axios.get("/api/user");
                     this.user = user.data.name;
                 } catch (err) {
-                    this.$store.commit("setError", error.message);
+                    this.$store.commit("errorState/setError", error.message);
                 }
             }
         }

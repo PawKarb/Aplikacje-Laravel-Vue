@@ -22,7 +22,7 @@
         methods:{
             async logout(){
                 await axios.post("/api/logout").then(response=>{
-                    this.$store.commit('toggleLogged', false);
+                    this.$store.commit('logged/toggleLogged', false);
                     this.$router.push({name: 'home'});
                     this.$toasted.success("Wylogowano pomyślnie!!!",{
                         action : {
@@ -37,13 +37,13 @@
 
                     });
                 }).catch(error=>{
-                    this.$store.commit("setError", error.message);
+                    this.$store.commit("errorState/setError", error.message);
                 });
             }
         },
         computed:{
             catchLogged(){
-                return this.$store.getters.isLogged;
+                return this.$store.getters['logged/isLogged'];
             }
         },
     }

@@ -1935,14 +1935,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      loggedStorage: null
+    };
+  },
   created: function created() {
     var _this = this;
 
+    this.loggedStorage = localStorage.getItem("vuex");
     axios.interceptors.response.use(function (response) {
       return response;
     }, function (error) {
-      if (error.response.status === 401 || error.response.status === 419) {
-        _this.$store.commit('toggleLogged', false);
+      if (error.response.status === 401 || error.response.status === 419 || _this.loggedStorage === null) {
+        _this.$store.commit('logged/toggleLogged', false);
 
         if (_this.$route.path != "/login") {
           _this.$router.push({
@@ -2014,24 +2020,26 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     catchError: function catchError() {
-      this.isError = this.$store.getters.getError;
-      return this.$store.getters.getError;
+      this.isError = this.$store.getters['errorState/getError'];
+      return this.$store.getters['errorState/getError'];
     }
   },
   methods: {
     hideNormal: function hideNormal() {
-      this.$store.commit("setError", null);
       this.isError = null;
+      this.$store.commit('errorState/setError', null);
     },
     hideRedirect: function hideRedirect() {
-      this.$store.commit("setError", null);
       this.isError = null;
+      this.$store.commit('errorState/setError', null);
       this.$router.push('/');
     }
   },
   watch: {
     isError: function isError() {
-      $("#error-modal").modal('show');
+      if (this.isError !== null) {
+        $("#error-modal").modal('show');
+      }
     }
   }
 });
@@ -2086,7 +2094,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.next = 2;
                 return axios.post("/api/logout").then(function (response) {
-                  _this.$store.commit('toggleLogged', false);
+                  _this.$store.commit('logged/toggleLogged', false);
 
                   _this.$router.push({
                     name: 'home'
@@ -2104,7 +2112,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     position: "bottom-right"
                   });
                 })["catch"](function (error) {
-                  _this.$store.commit("setError", error.message);
+                  _this.$store.commit("errorState/setError", error.message);
                 });
 
               case 2:
@@ -2118,7 +2126,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {
     catchLogged: function catchLogged() {
-      return this.$store.getters.isLogged;
+      return this.$store.getters['logged/isLogged'];
     }
   }
 });
@@ -2183,7 +2191,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.prev = 7;
                 _context.t0 = _context["catch"](0);
 
-                _this.$store.commit("setError", error.message);
+                _this.$store.commit("errorState/setError", error.message);
 
               case 10:
               case "end":
@@ -2313,53 +2321,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$v.$touch();
 
-                if (!_this.$v.$invalid) {
-                  _context.next = 6;
-                  break;
+                if (_this.$v.$invalid) {
+                  _this.submitStatus = 'ERROR';
+                } else {
+                  _this.submitStatus = null;
+
+                  try {} catch (error) {
+                    if (error.response.status === 422) {
+                      _this.errors = error.response.data.errors || {};
+                    } else if (error.response.status === 401) {
+                      _this.submitStatus = 'UNAUTHORIZED';
+                    } else {
+                      _this.$store.commit("errorState/setError", error.message);
+                    }
+                  }
+
+                  ;
                 }
 
-                _this.submitStatus = 'ERROR';
-                _context.next = 11;
-                break;
-
-              case 6:
-                _this.submitStatus = null;
-                _context.next = 9;
-                return axios.get("/sanctum/csrf-cookie");
-
-              case 9:
-                _context.next = 11;
-                return axios.post("/api/login", _this.loginData).then(function (response) {
-                  _this.$store.commit("toggleLogged", true);
-
-                  _this.loginData = {};
-
-                  _this.$router.push({
-                    name: 'dashboard'
-                  });
-
-                  _this.$toasted.success("Zalogowano pomyślnie!!!", {
-                    action: {
-                      text: 'OK',
-                      onClick: function onClick(e, toastObject) {
-                        toastObject.goAway(0);
-                      }
-                    },
-                    duration: 8000,
-                    icon: 'fingerprint',
-                    position: "bottom-right"
-                  });
-                })["catch"](function (error) {
-                  if (error.response.status === 422) {
-                    _this.errors = error.response.data.errors || {};
-                  } else if (error.response.status === 401) {
-                    _this.submitStatus = 'UNAUTHORIZED';
-                  } else {
-                    _this.$store.commit("setError", error.message);
-                  }
-                });
-
-              case 11:
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -2537,7 +2517,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   if (error.response.status === 422) {
                     _this.errors = error.response.data.errors || {};
                   } else {
-                    _this.$store.commit("setError", error.message);
+                    _this.$store.commit("errorState/setError", error.message);
                   }
                 });
 
@@ -40027,7 +40007,7 @@ var render = function() {
                   : _vm._e(),
                 _vm._v(" "),
                 !_vm.$v.loginData.email.email
-                  ? _c("span", [_vm._v("To pole musi być adresem email!")])
+                  ? _c("span", [_vm._v("To pole musi być ad resem email!")])
                   : _vm._e()
               ])
             ]),
@@ -40413,7 +40393,7 @@ var render = function() {
                 !_vm.$v.registerData.password_confirmation.minLength
                   ? _c("span", [
                       _vm._v(
-                        "Pole 'Powtórz hasło' musi mieć min - " +
+                        "Hasło musi mieć min - " +
                           _vm._s(
                             _vm.$v.registerData.password_confirmation.$params
                               .minLength.min
@@ -40425,11 +40405,7 @@ var render = function() {
                 _c("br"),
                 _vm._v(" "),
                 !_vm.$v.registerData.password_confirmation.sameAs
-                  ? _c("span", [
-                      _vm._v(
-                        "Pole 'Powtórz hasło' musi być takie samo jak pole 'Hasło!'"
-                      )
-                    ])
+                  ? _c("span", [_vm._v("Hasła nie są takie same!")])
                   : _vm._e()
               ])
             ]),
@@ -59145,7 +59121,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
 /* harmony import */ var vue_toasted__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-toasted */ "./node_modules/vue-toasted/dist/vue-toasted.min.js");
 /* harmony import */ var vue_toasted__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_toasted__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store */ "./resources/js/store.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../store */ "./resources/store/index.js");
 /* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
 /* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vuelidate__WEBPACK_IMPORTED_MODULE_5__);
 
@@ -59408,7 +59384,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_Login_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/Login.vue */ "./resources/js/views/Login.vue");
 /* harmony import */ var _views_Dashboard_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/Dashboard.vue */ "./resources/js/views/Dashboard.vue");
 /* harmony import */ var _views_Register_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/Register.vue */ "./resources/js/views/Register.vue");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./store */ "./resources/js/store.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../store */ "./resources/store/index.js");
 
 
 
@@ -59482,63 +59458,10 @@ router.beforeEach(function (to, from, next) {
 });
 
 function isLogged() {
-  return _store__WEBPACK_IMPORTED_MODULE_6__["default"].getters.isLogged;
+  return _store__WEBPACK_IMPORTED_MODULE_6__["default"].getters['logged/isLogged'];
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (router);
-
-/***/ }),
-
-/***/ "./resources/js/store.js":
-/*!*******************************!*\
-  !*** ./resources/js/store.js ***!
-  \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var vuex_persistedstate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex-persistedstate */ "./node_modules/vuex-persistedstate/dist/vuex-persistedstate.es.js");
-
-
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
-/* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
-  state: {
-    isLogged: false,
-    error: null
-  },
-  getters: {
-    isLogged: function isLogged(state) {
-      return state.isLogged;
-    },
-    getError: function getError(state) {
-      return state.error;
-    }
-  },
-  mutations: {
-    toggleLogged: function toggleLogged(state, data) {
-      state.isLogged = data;
-    },
-    setError: function setError(state, data) {
-      state.error = data;
-    }
-  },
-  actions: {
-    toggleLogged: function toggleLogged(_ref) {
-      var commit = _ref.commit;
-      commit('toggleLogged');
-    },
-    setError: function setError(_ref2) {
-      var commit = _ref2.commit;
-      commit('setError');
-    }
-  },
-  plugins: [Object(vuex_persistedstate__WEBPACK_IMPORTED_MODULE_2__["default"])()]
-}));
 
 /***/ }),
 
@@ -59826,6 +59749,108 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./resources/store/index.js":
+/*!**********************************!*\
+  !*** ./resources/store/index.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex_persistedstate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex-persistedstate */ "./node_modules/vuex-persistedstate/dist/vuex-persistedstate.es.js");
+/* harmony import */ var _modules_error__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/error */ "./resources/store/modules/error.js");
+/* harmony import */ var _modules_logged__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/logged */ "./resources/store/modules/logged.js");
+
+
+
+
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+  plugins: [Object(vuex_persistedstate__WEBPACK_IMPORTED_MODULE_2__["default"])()],
+  modules: {
+    errorState: _modules_error__WEBPACK_IMPORTED_MODULE_3__["errorState"],
+    logged: _modules_logged__WEBPACK_IMPORTED_MODULE_4__["logged"]
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (store);
+
+/***/ }),
+
+/***/ "./resources/store/modules/error.js":
+/*!******************************************!*\
+  !*** ./resources/store/modules/error.js ***!
+  \******************************************/
+/*! exports provided: errorState */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "errorState", function() { return errorState; });
+var errorState = {
+  namespaced: true,
+  state: {
+    errorData: null
+  },
+  mutations: {
+    setError: function setError(state, data) {
+      state.errorData = data;
+    }
+  },
+  actions: {
+    setError: function setError(_ref) {
+      var commit = _ref.commit;
+      commit('setError');
+    }
+  },
+  getters: {
+    getError: function getError(state) {
+      return state.errorData;
+    }
+  }
+};
+
+/***/ }),
+
+/***/ "./resources/store/modules/logged.js":
+/*!*******************************************!*\
+  !*** ./resources/store/modules/logged.js ***!
+  \*******************************************/
+/*! exports provided: logged */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "logged", function() { return logged; });
+var logged = {
+  namespaced: true,
+  state: {
+    loggedData: false
+  },
+  getters: {
+    isLogged: function isLogged(state) {
+      return state.loggedData;
+    }
+  },
+  mutations: {
+    toggleLogged: function toggleLogged(state, data) {
+      state.loggedData = data;
+    }
+  },
+  actions: {
+    toggleLogged: function toggleLogged(_ref) {
+      var commit = _ref.commit;
+      commit('toggleLogged');
+    }
+  }
+};
 
 /***/ }),
 
