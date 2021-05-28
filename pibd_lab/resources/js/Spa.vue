@@ -4,6 +4,12 @@
         <navigation/>
         <router-view></router-view>
         <error-modal />
+        <footer class="bg-light text-center text-lg-start fixed-bottom">
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © 2021 Copyright:
+            <span class="text-dark">Paweł Karbowski 112735</span>
+            </div>
+        </footer>
     </div>
 </template>
 <style scoped>

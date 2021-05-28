@@ -70,7 +70,7 @@ import { required, minLength, email } from 'vuelidate/lib/validators';
                     this.submitStatus = null;
                     await axios.get("/sanctum/csrf-cookie");
                     await axios.post("/api/login", this.loginData).then(response=>{
-                        this.$store.commit("toggleLogged", true);
+                        this.$store.commit("logged/toggleLogged", true);
                         this.loginData = {};
                         this.$router.push({name: 'dashboard'});
                         this.$toasted.success("Zalogowano pomyślnie!!!",{
@@ -90,7 +90,7 @@ import { required, minLength, email } from 'vuelidate/lib/validators';
                         }else if(error.response.status === 401){
                             this.submitStatus = 'UNAUTHORIZED';
                         }else{
-                            this.$store.commit("setError", error.message);
+                            this.$store.commit("errorState/setError", error.message);
                         }
                     });
                 }

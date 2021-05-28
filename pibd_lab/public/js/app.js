@@ -1932,6 +1932,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2321,25 +2327,53 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$v.$touch();
 
-                if (_this.$v.$invalid) {
-                  _this.submitStatus = 'ERROR';
-                } else {
-                  _this.submitStatus = null;
-
-                  try {} catch (error) {
-                    if (error.response.status === 422) {
-                      _this.errors = error.response.data.errors || {};
-                    } else if (error.response.status === 401) {
-                      _this.submitStatus = 'UNAUTHORIZED';
-                    } else {
-                      _this.$store.commit("errorState/setError", error.message);
-                    }
-                  }
-
-                  ;
+                if (!_this.$v.$invalid) {
+                  _context.next = 6;
+                  break;
                 }
 
-              case 3:
+                _this.submitStatus = 'ERROR';
+                _context.next = 11;
+                break;
+
+              case 6:
+                _this.submitStatus = null;
+                _context.next = 9;
+                return axios.get("/sanctum/csrf-cookie");
+
+              case 9:
+                _context.next = 11;
+                return axios.post("/api/login", _this.loginData).then(function (response) {
+                  _this.$store.commit("logged/toggleLogged", true);
+
+                  _this.loginData = {};
+
+                  _this.$router.push({
+                    name: 'dashboard'
+                  });
+
+                  _this.$toasted.success("Zalogowano pomyślnie!!!", {
+                    action: {
+                      text: 'OK',
+                      onClick: function onClick(e, toastObject) {
+                        toastObject.goAway(0);
+                      }
+                    },
+                    duration: 8000,
+                    icon: 'fingerprint',
+                    position: "bottom-right"
+                  });
+                })["catch"](function (error) {
+                  if (error.response.status === 422) {
+                    _this.errors = error.response.data.errors || {};
+                  } else if (error.response.status === 401) {
+                    _this.submitStatus = 'UNAUTHORIZED';
+                  } else {
+                    _this.$store.commit("errorState/setError", error.message);
+                  }
+                });
+
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -39679,12 +39713,39 @@ var render = function() {
       _vm._v(" "),
       _c("router-view"),
       _vm._v(" "),
-      _c("error-modal")
+      _c("error-modal"),
+      _vm._v(" "),
+      _vm._m(0)
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "footer",
+      { staticClass: "bg-light text-center text-lg-start fixed-bottom" },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "text-center p-3",
+            staticStyle: { "background-color": "rgba(0, 0, 0, 0.2)" }
+          },
+          [
+            _vm._v("\n            © 2021 Copyright:\n        "),
+            _c("span", { staticClass: "text-dark" }, [
+              _vm._v("Paweł Karbowski 112735")
+            ])
+          ]
+        )
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 
@@ -40007,7 +40068,7 @@ var render = function() {
                   : _vm._e(),
                 _vm._v(" "),
                 !_vm.$v.loginData.email.email
-                  ? _c("span", [_vm._v("To pole musi być ad resem email!")])
+                  ? _c("span", [_vm._v("To pole musi być adresem email!")])
                   : _vm._e()
               ])
             ]),
