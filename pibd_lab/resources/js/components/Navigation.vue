@@ -4,7 +4,15 @@
         <router-link v-if="catchLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'dashboard' }" tag="button">Dashboard</router-link>
         <router-link v-if="!catchLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'login' }" tag="button">Logowanie</router-link>
         <router-link v-if="!catchLogged" class="btn btn-sm btn-outline-secondary" :to="{ name: 'register' }" tag="button">Rejestracja</router-link>
-        <button v-if="catchLogged" class="btn btn-danger float-right btn-logout" @click.prevent="logout()">Wyloguj się</button>
+        <div v-if="catchLogged" class="btn-group float-right dropleft">
+            <button class="btn btn-outline-secondary btn-sm material-icons" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                settings
+            </button>
+            <div class="dropdown-menu">
+                <router-link class="dropdown-item text-center" :to="{ name: 'panel' }" tag="a">Profil <span class="material-icons">manage_accounts</span></router-link>
+                <a class="dropdown-item text-center" @click.prevent="logout">Wyloguj się <span class="material-icons">logout</span></a>
+            </div>
+        </div>
     </div>
 </template>
 <style scoped>
@@ -12,9 +20,9 @@
         text-align: center;
         padding: 0.5%;
     }
-    .btn-logout{
-        padding: 1px;
-        margin-right: 0.5px;
+    .material-icons{
+        display: inline-flex;
+        vertical-align: top;
     }
 </style>
 <script>

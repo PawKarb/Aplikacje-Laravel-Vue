@@ -21,7 +21,7 @@ h4{
   color: aliceblue;
 }
 h5{
-  color: aliceblue;
+  color: black;
 }
 .modal-header{
   background-color: rgb(231, 14, 14);

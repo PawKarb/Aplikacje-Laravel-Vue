@@ -12,6 +12,12 @@
 
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <style>
+            body{
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+        </style>
     </head>
     <body>
         <div id="app"></div>

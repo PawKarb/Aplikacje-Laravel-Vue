@@ -5,6 +5,7 @@ import Login from './views/Login.vue';
 import Dashboard from './views/Dashboard.vue';
 import Register from './views/Register.vue';
 import store from '../store';
+import Panel from './views/user/Panel.vue';
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,7 @@ const router = new VueRouter({
         { name: 'login', path: '/login', component: Login, meta: { guestOnly: true } },
         { name: 'dashboard', path: '/dashboard', component: Dashboard, meta: { requiresAuth: true }},
         { name: 'register', path: '/register', component: Register, meta: { guestOnly: true }},
+        { name: 'panel', path: '/panel', component: Panel, meta: {requiresAuth: true}},
         { path: '*', redirect: "/" }
     ]
 });
