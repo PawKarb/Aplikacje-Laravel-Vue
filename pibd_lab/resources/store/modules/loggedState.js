@@ -1,4 +1,4 @@
-export const logged = {
+export const loggedState = {
     namespaced: true,
     state:{
         loggedData: false,

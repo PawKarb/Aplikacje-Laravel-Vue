@@ -56,13 +56,13 @@ import { required, minLength, email } from 'vuelidate/lib/validators';
                     email: null,
                     password: null,
                 },
-                errors: {},
+                errors: null,
                 submitStatus: null
             }
         },
         methods:{
             async sendLogin(){
-                this.errors = {};
+                this.errors = null;
                 this.$v.$touch();
                 if (this.$v.$invalid) {
                     this.submitStatus = 'ERROR'
@@ -70,7 +70,7 @@ import { required, minLength, email } from 'vuelidate/lib/validators';
                     this.submitStatus = null;
                     await axios.get("/sanctum/csrf-cookie");
                     await axios.post("/api/login", this.loginData).then(response=>{
-                        this.$store.commit("logged/toggleLogged", true);
+                        this.$store.commit("loggedState/toggleLogged", true);
                         this.loginData = {};
                         this.$router.push({name: 'dashboard'});
                         this.$toasted.success("Zalogowano pomyślnie!!!",{

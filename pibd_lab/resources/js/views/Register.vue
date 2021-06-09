@@ -78,13 +78,13 @@ import { required, minLength, email, maxLength, sameAs } from 'vuelidate/lib/val
                     password: null,
                     password_confirmation: null,
                 },
-                errors:{},
+                errors: null,
                 submitStatus: null,
             }
         },
         methods:{
             async sendRegister(){
-                this.errors = {};
+                this.errors = null;
                 this.$v.$touch();
                 if (this.$v.$invalid) {
                     this.submitStatus = 'ERROR';

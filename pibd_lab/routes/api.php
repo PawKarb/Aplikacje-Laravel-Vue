@@ -23,6 +23,7 @@ Route::post('/register', [LoginController::class,'register']);
 Route::post('/login',[LoginController::class,'login']);
 Route::post('/logout',[LoginController::class,'logout']);
 Route::apiResource('students','StudentController');
-Route::apiResource('user','StudentController')->only([
+Route::apiResource('user','UserController')->only([
     'update', 'destroy'
 ]);
+Route::post('/user/updatepassword', [UserController::class,'updatePassword']);

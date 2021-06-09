@@ -9,7 +9,7 @@
                 settings
             </button>
             <div class="dropdown-menu">
-                <router-link class="dropdown-item text-center" :to="{ name: 'panel' }" tag="a">Profil <span class="material-icons">manage_accounts</span></router-link>
+                <router-link v-if="this.$route.path != '/panel'" class="dropdown-item text-center" :to="{ name: 'panel' }" tag="a">Profil <span class="material-icons">manage_accounts</span></router-link>
                 <a class="dropdown-item text-center" @click.prevent="logout">Wyloguj się <span class="material-icons">logout</span></a>
             </div>
         </div>
@@ -30,8 +30,11 @@
         methods:{
             async logout(){
                 await axios.post("/api/logout").then(response=>{
-                    this.$store.commit('logged/toggleLogged', false);
-                    this.$router.push({name: 'home'});
+                    this.$store.commit('loggedState/toggleLogged', false);
+                    this.$store.commit('passwordState/toggleChangePassword', false);
+                    if(this.$route.path != "/"){
+                        this.$router.push({name: 'home'});
+                    }
                     this.$toasted.success("Wylogowano pomyślnie!!!",{
                         action : {
                             text : 'OK',
@@ -51,7 +54,7 @@
         },
         computed:{
             catchLogged(){
-                return this.$store.getters['logged/isLogged'];
+                return this.$store.getters['loggedState/isLogged'];
             }
         },
     }
