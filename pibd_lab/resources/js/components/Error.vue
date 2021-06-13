@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Upps, coś poszło nie tak!</h4>
+        <h4 class="modal-title">Informacja</h4>
       </div>
       <div class="modal-body text-center">
         <h5>{{catchError}}</h5>

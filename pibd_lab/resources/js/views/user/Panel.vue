@@ -82,9 +82,8 @@ export default{
         },
         async updateUser(){
             this.errors = null;
-            this.submitStatus = null;
             this.$v.$touch();
-            if (this.$v.$invalid || !this.formData) {
+            if (this.$v.$invalid || !Object.keys(this.formData).length) {
                 this.submitStatus = 'ERROR';
             }else{
                 this.submitStatus = null;
@@ -93,7 +92,7 @@ export default{
                     this.formData = {};
                     this.$store.commit('passwordState/toggleChangePassword', false);
                     this.$router.push({name: 'dashboard'});
-                    this.$toasted.success("Dane zostały zmienione",{
+                    this.$toasted.success("Dane zostały zaktualizowane",{
                         action : {
                             text : 'OK',
                             onClick : (e, toastObject) => {

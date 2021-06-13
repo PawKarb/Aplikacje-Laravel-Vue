@@ -108,6 +108,9 @@ export default{
     created(){
         this.getUser();
     },
+    beforeDestroy() {
+        this.$store.commit('passwordState/toggleChangePassword', false);
+    },
     validations:{
         formData:{
             actual_password:{

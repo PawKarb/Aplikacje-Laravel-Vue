@@ -1,6 +1,6 @@
 <template>
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div v-if="!catchPasswordReset" class="col-md-6">
             <div class="card">
                 <div class="card-header">Logowanie</div>
                 <form @submit.prevent="sendLogin()" class="card-body">
@@ -28,6 +28,9 @@
                     <div v-if="submitStatus === 'UNAUTHORIZED'" class="alert alert-danger" role="alert">
                         Niepoprawny email lub hasło.
                     </div>
+                    <div v-if="submitStatus === 'ToManyRequest'" class="alert alert-danger" role="alert">
+                        Wykonałeś za dużo prób logowania. Spróbuj ponownie później.
+                    </div>
                     <div v-if="errors && errors.email" class="alert alert-danger" role="alert">
                         {{ errors.email[0] }}
                     </div>
@@ -36,20 +39,24 @@
                             <div class="form-group">
                                 <input type="submit" class="btn btn-primary" value = "Zaloguj się"/>
                                 <router-link class="btn btn-secondary" :to="{name: 'register'}">Utwórz nowe konto</router-link>
+                                <button class="btn btn-link" @click.prevent="setResetPassword">Zapomniałeś hasła?</button>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+        <reset-password v-if="catchPasswordReset"></reset-password>
     </div>
 </template>
 <style scoped>
 
 </style>
 <script>
+import ResetPassword from '../auth/ResetPassword.vue';
 import { required, minLength, email } from 'vuelidate/lib/validators';
     export default {
+        components: { ResetPassword },
         data(){
             return{
                 loginData:{
@@ -57,10 +64,13 @@ import { required, minLength, email } from 'vuelidate/lib/validators';
                     password: null,
                 },
                 errors: null,
-                submitStatus: null
+                submitStatus: null,
             }
         },
         methods:{
+            setResetPassword(){
+                this.$store.commit('resetPasswordState/toggleResetPassword', true);
+            },
             async sendLogin(){
                 this.errors = null;
                 this.$v.$touch();
@@ -89,6 +99,8 @@ import { required, minLength, email } from 'vuelidate/lib/validators';
                             this.errors = error.response.data.errors || {};
                         }else if(error.response.status === 401){
                             this.submitStatus = 'UNAUTHORIZED';
+                        }else if(error.response.status === 429){
+                            this.submitStatus = 'ToManyRequest';
                         }else{
                             this.$store.commit("errorState/setError", error.message);
                         }
@@ -108,5 +120,10 @@ import { required, minLength, email } from 'vuelidate/lib/validators';
                 }
             }
         },
+        computed:{
+        catchPasswordReset(){
+            return this.$store.getters['resetPasswordState/getResetPassword'];
+        },
+    },
     }
 </script>

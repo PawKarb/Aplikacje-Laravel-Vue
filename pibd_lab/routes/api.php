@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,8 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [LoginController::class,'register']);
 Route::post('/login',[LoginController::class,'login']);
 Route::post('/logout',[LoginController::class,'logout']);
-Route::apiResource('students','StudentController');
 Route::apiResource('user','UserController')->only([
     'update', 'destroy'
 ]);
 Route::post('/user/updatepassword', [UserController::class,'updatePassword']);
+Route::post('/notify/{user}', [MainController::class,'sendNotification']);
+Route::post('/reset/password', [LoginController::class,'callResetPassword']);
+Route::post('/reset-password', [LoginController::class,'sendPasswordLink']);

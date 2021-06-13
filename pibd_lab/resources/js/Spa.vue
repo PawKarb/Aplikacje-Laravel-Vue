@@ -13,13 +13,13 @@ import ErrorModal from './components/Error.vue';
     export default {
         data(){
             return{
-                loggedStorage: null,
+                storage: null,
             }
         },
         created() {
-            this.loggedStorage = localStorage.getItem("vuex");
+            this.storage = sessionStorage.getItem("vuex");
             axios.interceptors.response.use(response => {return response},error => {
-                if (error.response.status === 401 || error.response.status === 419 || this.loggedStorage === null) {
+                if (error.response.status === 401 || error.response.status === 419 || this.storage === null) {
                     this.$store.commit('loggedState/toggleLogged',false);
                     if (this.$route.path != "/login") {
                         this.$router.push({ name: "login" });

@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from './views/Home.vue';
-import Login from './views/Login.vue';
+import Login from './views/auth/Login.vue';
 import Dashboard from './views/Dashboard.vue';
-import Register from './views/Register.vue';
+import Register from './views/auth/Register.vue';
 import store from '../store';
-import Panel from './components/user/Panel';
+import Panel from './views/user/Panel';
+import ResetPasswordForm from './views/auth/ResetPasswordForm';
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,7 @@ const router = new VueRouter({
         { name: 'login', path: '/login', component: Login, meta: { guestOnly: true } },
         { name: 'dashboard', path: '/dashboard', component: Dashboard, meta: { requiresAuth: true }},
         { name: 'register', path: '/register', component: Register, meta: { guestOnly: true }},
+        { name: 'reset-password-form', path: '/reset-password/:token', component: ResetPasswordForm, meta: { guestOnly: true }},
         { name: 'panel', path: '/panel', component: Panel, meta: {requiresAuth: true}},
         { path: '*', redirect: "/" }
     ]

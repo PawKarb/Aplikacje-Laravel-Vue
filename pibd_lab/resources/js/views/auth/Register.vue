@@ -48,9 +48,6 @@
                     <div v-if="errors && errors.name" class="alert alert-danger" role="alert">
                         {{ errors.name[0] }}
                     </div>
-                    <div v-if="errors && errors.email" class="alert alert-danger" role="alert">
-                        {{ errors.email[0] }}
-                    </div>
                     <div class="row">
                         <div class="text-center">
                             <div class="form-group">
