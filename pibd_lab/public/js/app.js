@@ -2885,7 +2885,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 9:
                 _this.formData.token = _this.$route.params.token;
                 _context.next = 12;
-                return axios.post("api/reset/password", _this.formData).then(function (response) {
+                return axios.post("/api/reset/password", _this.formData).then(function (response) {
                   _this.formData = {};
 
                   _this.$router.push({

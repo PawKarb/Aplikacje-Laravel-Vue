@@ -60,7 +60,7 @@ export default{
                 this.submitStatus = null;
                 await axios.get("/sanctum/csrf-cookie");
                 this.formData.token = this.$route.params.token;
-                await axios.post("api/reset/password", this.formData).then(response=>{
+                await axios.post("/api/reset/password", this.formData).then(response=>{
                     this.formData = {};
                     this.$router.push({name: 'login'});
                     this.$toasted.success("Hasło zostało zmienione",{
@@ -96,7 +96,7 @@ export default{
                 sameAsPassword: sameAs('password')
             },
         },
-    }
+    },
 }
 </script>
 

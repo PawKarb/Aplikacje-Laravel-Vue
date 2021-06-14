@@ -67,7 +67,7 @@ class LoginController extends Controller
             'token' => 'required'
         ]);
         if(Hash::check($request->password,$user->password)){
-            return response()->json('Aktualne hasło nie może być takie same jak poprzednie',422);
+            return response()->json('Aktualne haslo nie moze byc takie same jak poprzednie',422);
         }else{
             return $this->resetPassword($user, $request->password);
         }
@@ -75,8 +75,8 @@ class LoginController extends Controller
     protected function resetPassword($user, $password)
     {
         $user->password = Hash::make($password);
-        $user->update();
         $user->setRememberToken(Str::random(60));
+        $user->save();
         event(new PasswordReset($user));
     }
     protected static function getEmailFromToken($token){
