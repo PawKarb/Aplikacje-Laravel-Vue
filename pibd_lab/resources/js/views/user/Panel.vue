@@ -66,7 +66,7 @@
 </style>
 <script>
 import changePassword from '../user/changePassword.vue';
-import { required, minLength, email, maxLength, alpha } from 'vuelidate/lib/validators';
+import { minLength, email, maxLength, alpha } from 'vuelidate/lib/validators';
 export default{
     data(){
         return{

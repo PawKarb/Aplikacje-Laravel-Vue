@@ -5,6 +5,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PasswordResetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,5 +29,5 @@ Route::apiResource('user','UserController')->only([
 ]);
 Route::post('/user/updatepassword', [UserController::class,'updatePassword']);
 Route::post('/notify/{user}', [MainController::class,'sendNotification']);
-Route::post('/reset/password', [LoginController::class,'callResetPassword']);
+Route::post('/reset/password', [PasswordResetController::class,'callResetPassword']);
 Route::post('/reset-password', [LoginController::class,'sendPasswordLink']);
