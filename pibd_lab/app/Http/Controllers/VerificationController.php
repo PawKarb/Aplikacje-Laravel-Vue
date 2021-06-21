@@ -1,9 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Support\Facades\Auth;
 
 class VerificationController extends Controller
 {
@@ -20,11 +26,6 @@ class VerificationController extends Controller
 
     use VerifiesEmails;
 
-    /**
-     * Where to redirect users after verification.
-     *
-     * @var string
-     */
     protected $redirectTo = "/login";
 
     /**
@@ -35,7 +36,48 @@ class VerificationController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
-        $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
+    }
+        /**
+     * Resend the email verification notification.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function resend(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+
+            return response(['message'=>'Already verified']);
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        if ($request->wantsJson()) {
+            return response(['message' => 'Email Sent']);
+        }
+    }
+
+
+    /**
+     * Mark the authenticated user's email address as verified.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function verify(Request $request)
+    {
+        $user = User::where('id',$request->route('id')) -> first();
+        if ($user->hasVerifiedEmail()) {
+
+            return response(['message'=>'Already verified']);
+        }
+
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+        }
+
+        return response(['message'=>'Successfully verified']);
     }
 }

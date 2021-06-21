@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use App\Notifications\MailResetPasswordNotification;
+use App\Notifications\MailVerificationNotification;
 
 class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
 {
@@ -17,7 +18,7 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'first_name', 'last_name', 'address', 'born_date'
+        'name', 'email', 'password', 'first_name', 'last_name', 'address', 'born_date', 'email_verified_at', 'email_verified_at'
     ];
 
     /**
@@ -41,4 +42,8 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
     {
         $this->notify(new MailResetPasswordNotification($token));
     }
+    public function sendEmailVerificationNotification()
+{
+    $this->notify(new MailVerificationNotification());
+}
 }

@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Foundation\Auth\VerifiesEmails;
 
 class LoginController extends Controller
 {
-    use SendsPasswordResetEmails;
+    use SendsPasswordResetEmails, VerifiesEmails;
 
     public function __construct()
     {
@@ -24,10 +25,17 @@ class LoginController extends Controller
         ],[
             'email.exists'=>'Podany adres email nie istnieje!',
         ]);
-        if (Auth::attempt($request->only('email', 'password'))) {
-            return response()->json('', 204);
+        $user = User::where('email',$request->email) -> first();
+        if($user->email_verified_at != null){
+            if (Auth::attempt($request->only('email', 'password'))) {
+                return response()->json('', 204);
+            }else{
+                return response()->json(['error' => 'Nieudane logowanie!'], 401);
+            }
+        }else{
+            $user->sendEmailVerificationNotification();
+            return response()->json('Konto nie jest aktywowane',422);
         }
-        return response()->json(['error' => 'Nieudane logowanie!'], 401);
     }
     function logout(){
         Auth::logout();

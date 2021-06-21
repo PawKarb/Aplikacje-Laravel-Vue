@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use App\Http\Service\ResetPasswordService;
-use Illuminate\Support\Facades\DB;
 
 class PasswordResetController extends Controller
 {
@@ -41,7 +40,7 @@ class PasswordResetController extends Controller
     }
     public function checkToken(Request $request){
         $tokenExp = $this->resetPasswordService->getExpirationFromToken($request->token);
-        $expiredAt = Carbon::now()->subSeconds(config(config('auth.passwords.users.expire')*60));
+        $expiredAt = Carbon::now()->subSeconds(config('auth.passwords.users.expire')*60);
         if(Carbon::parse($tokenExp)->gte($expiredAt) && !$tokenExp){
             return 0;
         }else{
