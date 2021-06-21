@@ -13,7 +13,6 @@ class MainController extends Controller
         return view('spa');
     }
     function sendNotification(User $user){
-        $delay = Carbon::now()->addSeconds(10);
-        $user->notify((new TaskNotification)->delay($delay));
+        $user->notify(new TaskNotification);
     }
 }

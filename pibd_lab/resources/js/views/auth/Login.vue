@@ -95,6 +95,7 @@ import { required, minLength, email } from 'vuelidate/lib/validators';
                             position: "bottom-right",
                         });
                     }).catch(error =>{
+                        this.loginData.password = null;
                         if (error.response.status === 422) {
                             this.errors = error.response.data.errors || {};
                         }else if(error.response.status === 401){

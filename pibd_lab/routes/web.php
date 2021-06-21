@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('{any}', [MainController::class, 'index'])->where('any','.*');
 Route::get("/login",[MainController::class, 'index'])->name('login');
+

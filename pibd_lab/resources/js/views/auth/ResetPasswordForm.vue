@@ -1,6 +1,6 @@
 <template>
 <div class="row justify-content-center">
-    <div class="card">
+    <div v-if="isExpired.data === 1" class="card">
         <div class="card-header">Resetowanie Hasła</div>
         <form class="card-body">
             <div class="form-group">
@@ -31,10 +31,16 @@
                 <button class="btn btn-primary" @click.prevent="updatePassword">Zapisz Hasło</button>
         </form>
     </div>
+    <div class="text-center" v-if="isExpired.data === 0">
+        <span class="alert alert-danger" role="alert">Link jest nieaktywny lub wygasł</span>
+    </div>
 </div>
 </template>
 <style scoped>
-
+    .text-center{
+        font-size: 24px;
+        padding-top: 128px;
+    }
 </style>
 <script>
 import { required, minLength, sameAs } from 'vuelidate/lib/validators';
@@ -47,7 +53,8 @@ export default{
                 token: null,
                 password: null,
                 password_confirmation: null,
-            }
+            },
+            isExpired: 0,
         }
     },
     methods:{
@@ -62,7 +69,7 @@ export default{
                 this.formData.token = this.$route.params.token;
                 await axios.post("/api/reset/password", this.formData).then(response=>{
                     this.formData = {};
-                    this.$router.push({name: 'login'});
+                    this.$router.replace({ name: 'login' });
                     this.$toasted.success("Hasło zostało zmienione",{
                         action : {
                             text : 'OK',
@@ -83,6 +90,13 @@ export default{
                 });
             }
         },
+        async getTokenExpiration(){
+            try{
+                this.isExpired = await axios.get("/api/reset-password-token/"+this.$route.params.token);
+            }catch (err) {
+                this.$store.commit("errorState/setError", err.message);
+            }
+        }
     },
     validations:{
         formData:{
@@ -97,6 +111,9 @@ export default{
             },
         },
     },
+    created(){
+        this.getTokenExpiration();
+    }
 }
 </script>
 

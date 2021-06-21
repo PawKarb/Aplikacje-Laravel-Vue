@@ -8,6 +8,7 @@ import store from '../store';
 import Panel from './views/user/Panel';
 import ResetPasswordForm from './views/auth/ResetPasswordForm';
 
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({

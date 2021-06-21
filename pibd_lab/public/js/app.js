@@ -2420,6 +2420,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     position: "bottom-right"
                   });
                 })["catch"](function (error) {
+                  _this.loginData.password = null;
+
                   if (error.response.status === 422) {
                     _this.errors = error.response.data.errors || {};
                   } else if (error.response.status === 401) {
@@ -2596,7 +2598,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     name: 'login'
                   });
 
-                  _this.$toasted.success("Zarejestrowano pomyślnie, teraz możesz się zalogować", {
+                  _this.$toasted.success("Zarejestrowano pomyślnie", {
                     action: {
                       text: 'OK',
                       onClick: function onClick(e, toastObject) {
@@ -2842,6 +2844,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2852,7 +2860,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         token: null,
         password: null,
         password_confirmation: null
-      }
+      },
+      isExpired: 0
     };
   },
   methods: {
@@ -2888,7 +2897,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return axios.post("/api/reset/password", _this.formData).then(function (response) {
                   _this.formData = {};
 
-                  _this.$router.push({
+                  _this.$router.replace({
                     name: 'login'
                   });
 
@@ -2918,6 +2927,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    getTokenExpiration: function getTokenExpiration() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios.get("/api/reset-password-token/" + _this2.$route.params.token);
+
+              case 3:
+                _this2.isExpired = _context2.sent;
+                _context2.next = 9;
+                break;
+
+              case 6:
+                _context2.prev = 6;
+                _context2.t0 = _context2["catch"](0);
+
+                _this2.$store.commit("errorState/setError", _context2.t0.message);
+
+              case 9:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 6]]);
+      }))();
     }
   },
   validations: {
@@ -2932,6 +2972,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         sameAsPassword: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["sameAs"])('password')
       }
     }
+  },
+  created: function created() {
+    this.getTokenExpiration();
   }
 });
 
@@ -2957,14 +3000,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -3068,8 +3103,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.next = 11;
                 return axios.put("/api/user/" + _this.user.data.id, _this.formData).then(function (response) {
                   _this.formData = {};
-
-                  _this.$store.commit('passwordState/toggleChangePassword', false);
 
                   _this.$router.push({
                     name: 'dashboard'
@@ -3205,12 +3238,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       },
       email: {
         email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["email"]
-      },
-      first_name: {
-        alpha: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["alpha"]
-      },
-      last_name: {
-        alpha: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["alpha"]
       }
     }
   }
@@ -7360,6 +7387,25 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 // module
 exports.push([module.i, "\n#navigation-buttons[data-v-d456e682]{\n    text-align: center;\n    padding: 0.5%;\n}\n.material-icons[data-v-d456e682]{\n    display: inline-flex;\n    vertical-align: top;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/auth/ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/auth/ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.text-center[data-v-440c3466]{\n    font-size: 24px;\n    padding-top: 128px;\n}\n", ""]);
 
 // exports
 
@@ -43704,6 +43750,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/auth/ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/auth/ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/auth/ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/lib/addStyles.js":
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
@@ -45355,160 +45431,186 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row justify-content-center" }, [
-    _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [_vm._v("Resetowanie Hasła")]),
-      _vm._v(" "),
-      _c("form", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "password" } }, [_vm._v("Nowe hasło")]),
+    _vm.isExpired.data === 1
+      ? _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("Resetowanie Hasła")
+          ]),
           _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.$v.formData.password.$model,
-                expression: "$v.formData.password.$model"
-              }
-            ],
-            staticClass: "form-control",
-            class: {
-              "is-invalid": _vm.$v.formData.password.$error,
-              "is-valid": !_vm.$v.formData.password.$invalid
-            },
-            attrs: { type: "password", name: "password" },
-            domProps: { value: _vm.$v.formData.password.$model },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+          _c("form", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "password" } }, [
+                _vm._v("Nowe hasło")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.$v.formData.password.$model,
+                    expression: "$v.formData.password.$model"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.$v.formData.password.$error,
+                  "is-valid": !_vm.$v.formData.password.$invalid
+                },
+                attrs: { type: "password", name: "password" },
+                domProps: { value: _vm.$v.formData.password.$model },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.$v.formData.password,
+                      "$model",
+                      $event.target.value
+                    )
+                  }
                 }
-                _vm.$set(
-                  _vm.$v.formData.password,
-                  "$model",
-                  $event.target.value
-                )
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "invalid-feedback" }, [
-            !_vm.$v.formData.password.required
-              ? _c("span", [_vm._v("To pole jest wymagane!")])
-              : _vm._e(),
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "invalid-feedback" }, [
+                !_vm.$v.formData.password.required
+                  ? _c("span", [_vm._v("To pole jest wymagane!")])
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.$v.formData.password.minLength
+                  ? _c("span", [
+                      _vm._v(
+                        "Hasło musi mieć min - " +
+                          _vm._s(
+                            _vm.$v.formData.password.$params.minLength.min
+                          ) +
+                          " znaków!"
+                      )
+                    ])
+                  : _vm._e()
+              ])
+            ]),
             _vm._v(" "),
-            !_vm.$v.formData.password.minLength
-              ? _c("span", [
-                  _vm._v(
-                    "Hasło musi mieć min - " +
-                      _vm._s(_vm.$v.formData.password.$params.minLength.min) +
-                      " znaków!"
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "password" } }, [
+                _vm._v("Powtórz hasło")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.$v.formData.password_confirmation.$model,
+                    expression: "$v.formData.password_confirmation.$model"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.$v.formData.password_confirmation.$error,
+                  "is-valid": !_vm.$v.formData.password_confirmation.$invalid
+                },
+                attrs: { type: "password", name: "password" },
+                domProps: {
+                  value: _vm.$v.formData.password_confirmation.$model
+                },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.$v.formData.password_confirmation,
+                      "$model",
+                      $event.target.value
+                    )
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "invalid-feedback" }, [
+                !_vm.$v.formData.password_confirmation.required
+                  ? _c("span", [_vm._v("To pole jest wymagane!")])
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.$v.formData.password_confirmation.minLength
+                  ? _c("span", [
+                      _vm._v(
+                        "Hasło musi mieć min - " +
+                          _vm._s(
+                            _vm.$v.formData.password_confirmation.$params
+                              .minLength.min
+                          ) +
+                          " znaków!"
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.$v.formData.password_confirmation.sameAs
+                  ? _c("span", [_vm._v("Hasła nie są takie same!")])
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _vm.submitStatus === "ERROR"
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    Prosimy o poprawne wypełnienie formularza.\n                "
+                      )
+                    ]
                   )
-                ])
-              : _vm._e()
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.errors
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm.errors) +
+                          "\n                "
+                      )
+                    ]
+                  )
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.updatePassword($event)
+                  }
+                }
+              },
+              [_vm._v("Zapisz Hasło")]
+            )
           ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "password" } }, [
-            _vm._v("Powtórz hasło")
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.$v.formData.password_confirmation.$model,
-                expression: "$v.formData.password_confirmation.$model"
-              }
-            ],
-            staticClass: "form-control",
-            class: {
-              "is-invalid": _vm.$v.formData.password_confirmation.$error,
-              "is-valid": !_vm.$v.formData.password_confirmation.$invalid
-            },
-            attrs: { type: "password", name: "password" },
-            domProps: { value: _vm.$v.formData.password_confirmation.$model },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(
-                  _vm.$v.formData.password_confirmation,
-                  "$model",
-                  $event.target.value
-                )
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "invalid-feedback" }, [
-            !_vm.$v.formData.password_confirmation.required
-              ? _c("span", [_vm._v("To pole jest wymagane!")])
-              : _vm._e(),
-            _vm._v(" "),
-            !_vm.$v.formData.password_confirmation.minLength
-              ? _c("span", [
-                  _vm._v(
-                    "Hasło musi mieć min - " +
-                      _vm._s(
-                        _vm.$v.formData.password_confirmation.$params.minLength
-                          .min
-                      ) +
-                      " znaków!"
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            !_vm.$v.formData.password_confirmation.sameAs
-              ? _c("span", [_vm._v("Hasła nie są takie same!")])
-              : _vm._e()
-          ]),
-          _vm._v(" "),
-          _vm.submitStatus === "ERROR"
-            ? _c(
-                "div",
-                { staticClass: "alert alert-danger", attrs: { role: "alert" } },
-                [
-                  _vm._v(
-                    "\n                    Prosimy o poprawne wypełnienie formularza.\n                "
-                  )
-                ]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.errors
-            ? _c(
-                "div",
-                { staticClass: "alert alert-danger", attrs: { role: "alert" } },
-                [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.errors) +
-                      "\n                "
-                  )
-                ]
-              )
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.updatePassword($event)
-              }
-            }
-          },
-          [_vm._v("Zapisz Hasło")]
-        )
-      ])
-    ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.isExpired.data === 0
+      ? _c("div", { staticClass: "text-center" }, [
+          _c(
+            "span",
+            { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+            [_vm._v("Link jest nieaktywny lub wygasł")]
+          )
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -45664,41 +45766,30 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.$v.formData.first_name.$model,
-                            expression: "$v.formData.first_name.$model"
+                            value: _vm.formData.first_name,
+                            expression: "formData.first_name"
                           }
                         ],
                         staticClass: "form-control",
-                        class: {
-                          "is-invalid": _vm.$v.formData.first_name.$error
-                        },
                         attrs: {
                           type: "text",
                           placeholder: _vm.user.data.first_name,
                           name: "first_name"
                         },
-                        domProps: { value: _vm.$v.formData.first_name.$model },
+                        domProps: { value: _vm.formData.first_name },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.$v.formData.first_name,
-                              "$model",
+                              _vm.formData,
+                              "first_name",
                               $event.target.value
                             )
                           }
                         }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "invalid-feedback" }, [
-                        !_vm.$v.formData.first_name.alpha
-                          ? _c("span", [
-                              _vm._v("W tym polu muszą być znaki alfabetyczne!")
-                            ])
-                          : _vm._e()
-                      ])
+                      })
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
@@ -45711,41 +45802,30 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.$v.formData.last_name.$model,
-                            expression: "$v.formData.last_name.$model"
+                            value: _vm.formData.last_name,
+                            expression: "formData.last_name"
                           }
                         ],
                         staticClass: "form-control",
-                        class: {
-                          "is-invalid": _vm.$v.formData.last_name.$error
-                        },
                         attrs: {
                           type: "text",
                           placeholder: _vm.user.data.last_name,
                           name: "last_name"
                         },
-                        domProps: { value: _vm.$v.formData.last_name.$model },
+                        domProps: { value: _vm.formData.last_name },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.$v.formData.last_name,
-                              "$model",
+                              _vm.formData,
+                              "last_name",
                               $event.target.value
                             )
                           }
                         }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "invalid-feedback" }, [
-                        !_vm.$v.formData.last_name.alpha
-                          ? _c("span", [
-                              _vm._v("W tym polu muszą być znaki alfabetyczne!")
-                            ])
-                          : _vm._e()
-                      ])
+                      })
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
@@ -64474,7 +64554,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ResetPasswordForm_vue_vue_type_template_id_440c3466_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ResetPasswordForm.vue?vue&type=template&id=440c3466&scoped=true& */ "./resources/js/views/auth/ResetPasswordForm.vue?vue&type=template&id=440c3466&scoped=true&");
 /* harmony import */ var _ResetPasswordForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ResetPasswordForm.vue?vue&type=script&lang=js& */ "./resources/js/views/auth/ResetPasswordForm.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _ResetPasswordForm_vue_vue_type_style_index_0_id_440c3466_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css& */ "./resources/js/views/auth/ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -64482,7 +64564,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _ResetPasswordForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _ResetPasswordForm_vue_vue_type_template_id_440c3466_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
   _ResetPasswordForm_vue_vue_type_template_id_440c3466_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -64511,6 +64593,22 @@ component.options.__file = "resources/js/views/auth/ResetPasswordForm.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ResetPasswordForm.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/auth/ResetPasswordForm.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/auth/ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css&":
+/*!****************************************************************************************************************!*\
+  !*** ./resources/js/views/auth/ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css& ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordForm_vue_vue_type_style_index_0_id_440c3466_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/auth/ResetPasswordForm.vue?vue&type=style&index=0&id=440c3466&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordForm_vue_vue_type_style_index_0_id_440c3466_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordForm_vue_vue_type_style_index_0_id_440c3466_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordForm_vue_vue_type_style_index_0_id_440c3466_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordForm_vue_vue_type_style_index_0_id_440c3466_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
 
 /***/ }),
 

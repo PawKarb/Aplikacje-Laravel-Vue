@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +17,7 @@ class LoginController extends Controller
         $this->middleware('throttle:30,5')->only('login');
     }
     function login (Request $request) {
-        $data = $request->validate([
+        $request->validate([
             'email' => 'required|email|exists:users',
             'password' => 'required|min:6',
 
@@ -55,3 +54,4 @@ class LoginController extends Controller
         return $this->sendResetLinkEmail($request);
     }
 }
+

@@ -25,7 +25,13 @@ class UserController extends Controller
                 'name.unique'=>'Podana nazwa użytkownika już istnieje!',
                 'email.unique'=>'Podany adres email już istnieje!',
             ]);
-        $user->update($request->all());
+        if($request->name && !$request->email){
+            $user->update($request->only('name','first_name','last_name','address','born_date'));
+        }else if($request->email && !$request->name){
+            $user->update($request->only('email','first_name','last_name','address','born_date'));
+        }else{
+            $user->update($request->all());
+        }
     }
     public function destroy(User $user)
     {

@@ -23,19 +23,11 @@
                     </div>
                     <div class="form-group">
                         <label for="first_name">Imię</label>
-                        <input type="text" class="form-control" :placeholder="user.data.first_name" name="first_name" v-model="$v.formData.first_name.$model"
-                            :class="{'is-invalid': $v.formData.first_name.$error}"/>
-                        <div class="invalid-feedback">
-                            <span v-if="!$v.formData.first_name.alpha">W tym polu muszą być znaki alfabetyczne!</span>
-                        </div>
+                        <input type="text" class="form-control" :placeholder="user.data.first_name" name="first_name" v-model="formData.first_name"/>
                     </div>
                     <div class="form-group">
                         <label for="last_name">Nazwisko</label>
-                        <input type="text" class="form-control" :placeholder="user.data.last_name" name="last_name" v-model="$v.formData.last_name.$model"
-                            :class="{'is-invalid': $v.formData.last_name.$error}"/>
-                        <div class="invalid-feedback">
-                            <span v-if="!$v.formData.last_name.alpha">W tym polu muszą być znaki alfabetyczne!</span>
-                        </div>
+                        <input type="text" class="form-control" :placeholder="user.data.last_name" name="last_name" v-model="formData.last_name"/>
                     </div>
                     <div class="form-group">
                         <label for="address">Adres</label>
@@ -90,7 +82,6 @@ export default{
                 await axios.get("/sanctum/csrf-cookie");
                 await axios.put("/api/user/"+this.user.data.id, this.formData).then(response=>{
                     this.formData = {};
-                    this.$store.commit('passwordState/toggleChangePassword', false);
                     this.$router.push({name: 'dashboard'});
                     this.$toasted.success("Dane zostały zaktualizowane",{
                         action : {
@@ -161,12 +152,6 @@ export default{
             },
             email: {
                 email
-            },
-            first_name:{
-                alpha,
-            },
-            last_name:{
-                alpha,
             },
         },
     }

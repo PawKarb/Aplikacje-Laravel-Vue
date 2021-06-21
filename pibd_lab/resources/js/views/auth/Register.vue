@@ -91,7 +91,7 @@ import { required, minLength, email, maxLength, sameAs } from 'vuelidate/lib/val
                     await axios.post("/api/register", this.registerData).then(response=>{
                         this.registerData = {};
                         this.$router.push({name: 'login'});
-                        this.$toasted.success("Zarejestrowano pomyślnie, teraz możesz się zalogować",{
+                        this.$toasted.success("Zarejestrowano pomyślnie",{
                             action : {
                                 text : 'OK',
                                 onClick : (e, toastObject) => {

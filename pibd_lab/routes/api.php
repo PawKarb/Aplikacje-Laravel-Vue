@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PasswordResetController;
@@ -31,3 +32,5 @@ Route::post('/user/updatepassword', [UserController::class,'updatePassword']);
 Route::post('/notify/{user}', [MainController::class,'sendNotification']);
 Route::post('/reset/password', [PasswordResetController::class,'callResetPassword']);
 Route::post('/reset-password', [LoginController::class,'sendPasswordLink']);
+Route::get('/reset-password-token/{token}', [PasswordResetController::class,'checkToken']);
+
