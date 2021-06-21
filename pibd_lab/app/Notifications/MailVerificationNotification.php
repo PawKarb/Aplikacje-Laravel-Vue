@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\URL;
 
-class MailVerificationNotification extends Notification //implements ShouldQueue
+class MailVerificationNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

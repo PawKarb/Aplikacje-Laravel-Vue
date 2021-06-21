@@ -34,6 +34,9 @@
                     <div v-if="errors && errors.email" class="alert alert-danger" role="alert">
                         {{ errors.email[0] }}
                     </div>
+                    <div v-if="submitStatus === 'Unactivated'" class="alert alert-danger" role="alert">
+                        Konto nie jest aktywne. Aby wysłać ponownie mail aktywacyjny <router-link :to="{ name: 'verify-user' }"> Kliknij tutaj</router-link>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -102,6 +105,8 @@ import { required, minLength, email } from 'vuelidate/lib/validators';
                             this.submitStatus = 'UNAUTHORIZED';
                         }else if(error.response.status === 429){
                             this.submitStatus = 'ToManyRequest';
+                        }else if(error.response.status === 450){
+                            this.submitStatus = "Unactivated"
                         }else{
                             this.$store.commit("errorState/setError", error.message);
                         }

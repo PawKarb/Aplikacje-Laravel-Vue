@@ -7,6 +7,7 @@ import Register from './views/auth/Register.vue';
 import store from '../store';
 import Panel from './views/user/Panel';
 import ResetPasswordForm from './views/auth/ResetPasswordForm';
+import VerifyEmail from './views/auth/VerifyEmail';
 
 
 Vue.use(VueRouter);
@@ -19,6 +20,7 @@ const router = new VueRouter({
         { name: 'dashboard', path: '/dashboard', component: Dashboard, meta: { requiresAuth: true }},
         { name: 'register', path: '/register', component: Register, meta: { guestOnly: true }},
         { name: 'reset-password-form', path: '/reset-password/:token', component: ResetPasswordForm, meta: { guestOnly: true }},
+        { name: 'verify-user', path: '/verify-user', component: VerifyEmail, meta: { guestOnly: true }},
         { name: 'panel', path: '/panel', component: Panel, meta: {requiresAuth: true}},
         { path: '*', redirect: "/" }
     ]

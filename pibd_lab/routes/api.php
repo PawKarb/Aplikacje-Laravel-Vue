@@ -34,7 +34,7 @@ Route::post('/reset/password', [PasswordResetController::class,'callResetPasswor
 Route::post('/reset-password', [LoginController::class,'sendPasswordLink']);
 Route::get('/reset-password-token/{token}', [PasswordResetController::class,'checkToken']);
 
-Route::get('/verify/resend',[VerificationController::class,'resend'])->name('verification.resend');
+Route::post('/verify/resend',[VerificationController::class,'resend'])->name('verification.resend');
 Route::get('/verify-email/{id}/{hash}', [VerificationController::class,'verify'])->name('verification.verify');
 
 

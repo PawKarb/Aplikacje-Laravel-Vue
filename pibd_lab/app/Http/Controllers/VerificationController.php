@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
-use Illuminate\Support\Facades\Auth;
 
 class VerificationController extends Controller
 {
@@ -35,8 +34,7 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
-        $this->middleware('throttle:6,1')->only('verify', 'resend');
+        $this->middleware('throttle:50,1')->only('verify', 'resend');
     }
         /**
      * Resend the email verification notification.
@@ -46,15 +44,21 @@ class VerificationController extends Controller
      */
     public function resend(Request $request)
     {
-        if ($request->user()->hasVerifiedEmail()) {
+        $request->validate([
+            'email' => 'required|email|exists:users',
+        ],[
+            'email.exists'=>'Podany adres email nie istnieje!',
+        ]);
+        $user = User::where('email',$request->email) -> first();
+        if ($user->email_verified_at != null) {
 
-            return response(['message'=>'Already verified']);
+            return response()->json('Konto juz jest zweryfikowane',422);
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        $user->sendEmailVerificationNotification();
 
         if ($request->wantsJson()) {
-            return response(['message' => 'Email Sent']);
+            return response()->json('Email z weryfikacją zostal wyslany', 204);
         }
     }
 
@@ -68,16 +72,18 @@ class VerificationController extends Controller
      */
     public function verify(Request $request)
     {
-        $user = User::where('id',$request->route('id')) -> first();
-        if ($user->hasVerifiedEmail()) {
+        $user = User::find($request->route('id'));
 
-            return response(['message'=>'Already verified']);
+        if (!hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
+            throw new AuthorizationException;
         }
+        if ($user->email_verified_at != null)
+            return response()->json('Konto juz jest zweryfikowane',422);
 
-        if ($user->markEmailAsVerified()) {
+        if ($user->markEmailAsVerified()){
             event(new Verified($user));
+            return redirect($this->redirectPath())->with('verified', true);
         }
 
-        return response(['message'=>'Successfully verified']);
     }
 }

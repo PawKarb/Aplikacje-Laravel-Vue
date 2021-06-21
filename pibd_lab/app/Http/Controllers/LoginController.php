@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use \Illuminate\Http\Response;
 
 class LoginController extends Controller
 {
@@ -33,8 +34,7 @@ class LoginController extends Controller
                 return response()->json(['error' => 'Nieudane logowanie!'], 401);
             }
         }else{
-            $user->sendEmailVerificationNotification();
-            return response()->json('Konto nie jest aktywowane',422);
+            return (new Response('Konto nie jest aktywne',450));
         }
     }
     function logout(){
