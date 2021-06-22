@@ -9,7 +9,7 @@
                     :class="{'is-invalid': $v.formData.actual_password.$error, 'is-valid': !$v.formData.actual_password.$invalid}"/>
                 <div class="invalid-feedback">
                     <span v-if="!$v.formData.actual_password.required">To pole jest wymagane!</span>
-                    <span v-if="!$v.formData.actual_password.minLength">Hasło musi mieć min - {{$v.formData.password.$params.minLength.min}} znaków!</span>
+                    <span v-if="!$v.formData.actual_password.passwordRegex">Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę</span>
                 </div>
             </div>
             <div class="form-group">
@@ -18,7 +18,7 @@
                     :class="{'is-invalid': $v.formData.password.$error, 'is-valid': !$v.formData.password.$invalid}"/>
                 <div class="invalid-feedback">
                     <span v-if="!$v.formData.password.required">To pole jest wymagane!</span>
-                    <span v-if="!$v.formData.password.minLength">Hasło musi mieć min - {{$v.formData.password.$params.minLength.min}} znaków!</span>
+                    <span v-if="!$v.formData.password.passwordRegex">Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę</span>
                 </div>
             </div>
             <div class="form-group">
@@ -27,7 +27,7 @@
                     :class="{'is-invalid': $v.formData.password_confirmation.$error, 'is-valid': !$v.formData.password_confirmation.$invalid}"/>
                 <div class="invalid-feedback">
                     <span v-if="!$v.formData.password_confirmation.required">To pole jest wymagane!</span>
-                    <span v-if="!$v.formData.password_confirmation.minLength">Hasło musi mieć min - {{$v.formData.password_confirmation.$params.minLength.min}} znaków!</span>
+                    <span v-if="!$v.formData.password_confirmation.passwordRegex">Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę</span>
                     <span v-if="!$v.formData.password_confirmation.sameAs">Hasła nie są takie same!</span>
                 </div>
                 <div v-if="submitStatus === 'ERROR'" class="alert alert-danger" role="alert">
@@ -47,7 +47,8 @@
 
 </style>
 <script>
-import { required, minLength, sameAs } from 'vuelidate/lib/validators';
+import { required, sameAs, helpers } from 'vuelidate/lib/validators';
+const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/);
 export default{
     data(){
         return{
@@ -115,15 +116,15 @@ export default{
         formData:{
             actual_password:{
                 required,
-                minLength: minLength(6)
+                passwordRegex
             },
             password: {
                 required,
-                minLength: minLength(6)
+                passwordRegex
             },
             password_confirmation: {
                 required,
-                minLength: minLength(6),
+                passwordRegex,
                 sameAsPassword: sameAs('password')
             },
         },

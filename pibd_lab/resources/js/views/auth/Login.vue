@@ -19,7 +19,7 @@
                             :class="{'is-invalid': $v.loginData.password.$error, 'is-valid': !$v.loginData.password.$invalid}"/>
                         <div class="invalid-feedback">
                             <span v-if="!$v.loginData.password.required">To pole jest wymagane!</span>
-                            <span v-if="!$v.loginData.password.minLength">Pole 'Hasło' musi mieć min - {{$v.loginData.password.$params.minLength.min}} znaków!</span>
+                            <span v-if="!$v.loginData.password.passwordRegex">Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę</span>
                         </div>
                     </div>
                     <div v-if="submitStatus === 'ERROR'" class="alert alert-danger" role="alert">
@@ -57,7 +57,8 @@
 </style>
 <script>
 import ResetPassword from '../auth/ResetPassword.vue';
-import { required, minLength, email } from 'vuelidate/lib/validators';
+import { required, email, helpers } from 'vuelidate/lib/validators';
+const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/);
     export default {
         components: { ResetPassword },
         data(){
@@ -122,7 +123,7 @@ import { required, minLength, email } from 'vuelidate/lib/validators';
                 },
                 password:{
                     required,
-                    minLength: minLength(6),
+                    passwordRegex,
                 }
             }
         },

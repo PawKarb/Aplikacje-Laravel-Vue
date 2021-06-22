@@ -21,7 +21,7 @@ class LoginController extends Controller
     function login (Request $request) {
         $request->validate([
             'email' => 'required|email|exists:users',
-            'password' => 'required|min:6',
+            'password' => 'required|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/',
 
         ],[
             'email.exists'=>'Podany adres email nie istnieje!',
@@ -45,7 +45,7 @@ class LoginController extends Controller
         $request->validate([
             'name'=> 'required|min:3|max:30|unique:users',
             'email'=> 'required|email',
-            'password'=> 'required|min:6|confirmed',
+            'password'=> 'required|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/|confirmed',
             'password_confirmation'=> 'required',
         ],
         [

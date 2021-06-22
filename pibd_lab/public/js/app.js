@@ -2356,6 +2356,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 
 
+var passwordRegex = vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["helpers"].regex('passwordRegex', /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     ResetPassword: _auth_ResetPassword_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -2455,7 +2456,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       },
       password: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["minLength"])(6)
+        passwordRegex: passwordRegex
       }
     }
   },
@@ -2554,6 +2555,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 
+var passwordRegex = vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["helpers"].regex('passwordRegex', /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2644,11 +2646,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       },
       password: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(6)
+        passwordRegex: passwordRegex
       },
       password_confirmation: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(6),
+        passwordRegex: passwordRegex,
         sameAsPassword: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["sameAs"])('password')
       }
     }
@@ -2856,6 +2858,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 
+var passwordRegex = vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["helpers"].regex('passwordRegex', /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2969,11 +2972,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     formData: {
       password: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(6)
+        passwordRegex: passwordRegex
       },
       password_confirmation: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(6),
+        passwordRegex: passwordRegex,
         sameAsPassword: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["sameAs"])('password')
       }
     }
@@ -3457,6 +3460,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 
+var passwordRegex = vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["helpers"].regex('passwordRegex', /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3578,15 +3582,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     formData: {
       actual_password: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(6)
+        passwordRegex: passwordRegex
       },
       password: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(6)
+        passwordRegex: passwordRegex
       },
       password_confirmation: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(6),
+        passwordRegex: passwordRegex,
         sameAsPassword: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["sameAs"])('password')
       }
     }
@@ -44969,15 +44973,10 @@ var render = function() {
                         ? _c("span", [_vm._v("To pole jest wymagane!")])
                         : _vm._e(),
                       _vm._v(" "),
-                      !_vm.$v.loginData.password.minLength
+                      !_vm.$v.loginData.password.passwordRegex
                         ? _c("span", [
                             _vm._v(
-                              "Pole 'Hasło' musi mieć min - " +
-                                _vm._s(
-                                  _vm.$v.loginData.password.$params.minLength
-                                    .min
-                                ) +
-                                " znaków!"
+                              "Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę"
                             )
                           ])
                         : _vm._e()
@@ -45303,14 +45302,10 @@ var render = function() {
                   ? _c("span", [_vm._v("To pole jest wymagane!")])
                   : _vm._e(),
                 _vm._v(" "),
-                !_vm.$v.registerData.password.minLength
+                !_vm.$v.registerData.password.passwordRegex
                   ? _c("span", [
                       _vm._v(
-                        "Pole 'Hasło' musi mieć min - " +
-                          _vm._s(
-                            _vm.$v.registerData.password.$params.minLength.min
-                          ) +
-                          " znaków!"
+                        "Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę"
                       )
                     ])
                   : _vm._e()
@@ -45361,15 +45356,10 @@ var render = function() {
                   ? _c("span", [_vm._v("To pole jest wymagane!")])
                   : _vm._e(),
                 _vm._v(" "),
-                !_vm.$v.registerData.password_confirmation.minLength
+                !_vm.$v.registerData.password_confirmation.passwordRegex
                   ? _c("span", [
                       _vm._v(
-                        "Hasło musi mieć min - " +
-                          _vm._s(
-                            _vm.$v.registerData.password_confirmation.$params
-                              .minLength.min
-                          ) +
-                          " znaków!"
+                        "Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę"
                       )
                     ])
                   : _vm._e(),
@@ -45643,14 +45633,10 @@ var render = function() {
                   ? _c("span", [_vm._v("To pole jest wymagane!")])
                   : _vm._e(),
                 _vm._v(" "),
-                !_vm.$v.formData.password.minLength
+                !_vm.$v.formData.password.passwordRegex
                   ? _c("span", [
                       _vm._v(
-                        "Hasło musi mieć min - " +
-                          _vm._s(
-                            _vm.$v.formData.password.$params.minLength.min
-                          ) +
-                          " znaków!"
+                        "Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę"
                       )
                     ])
                   : _vm._e()
@@ -45699,15 +45685,10 @@ var render = function() {
                   ? _c("span", [_vm._v("To pole jest wymagane!")])
                   : _vm._e(),
                 _vm._v(" "),
-                !_vm.$v.formData.password_confirmation.minLength
+                !_vm.$v.formData.password_confirmation.passwordRegex
                   ? _c("span", [
                       _vm._v(
-                        "Hasło musi mieć min - " +
-                          _vm._s(
-                            _vm.$v.formData.password_confirmation.$params
-                              .minLength.min
-                          ) +
-                          " znaków!"
+                        "Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę"
                       )
                     ])
                   : _vm._e(),
@@ -46349,12 +46330,10 @@ var render = function() {
               ? _c("span", [_vm._v("To pole jest wymagane!")])
               : _vm._e(),
             _vm._v(" "),
-            !_vm.$v.formData.actual_password.minLength
+            !_vm.$v.formData.actual_password.passwordRegex
               ? _c("span", [
                   _vm._v(
-                    "Hasło musi mieć min - " +
-                      _vm._s(_vm.$v.formData.password.$params.minLength.min) +
-                      " znaków!"
+                    "Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę"
                   )
                 ])
               : _vm._e()
@@ -46399,12 +46378,10 @@ var render = function() {
               ? _c("span", [_vm._v("To pole jest wymagane!")])
               : _vm._e(),
             _vm._v(" "),
-            !_vm.$v.formData.password.minLength
+            !_vm.$v.formData.password.passwordRegex
               ? _c("span", [
                   _vm._v(
-                    "Hasło musi mieć min - " +
-                      _vm._s(_vm.$v.formData.password.$params.minLength.min) +
-                      " znaków!"
+                    "Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę"
                   )
                 ])
               : _vm._e()
@@ -46451,15 +46428,10 @@ var render = function() {
               ? _c("span", [_vm._v("To pole jest wymagane!")])
               : _vm._e(),
             _vm._v(" "),
-            !_vm.$v.formData.password_confirmation.minLength
+            !_vm.$v.formData.password_confirmation.passwordRegex
               ? _c("span", [
                   _vm._v(
-                    "Hasło musi mieć min - " +
-                      _vm._s(
-                        _vm.$v.formData.password_confirmation.$params.minLength
-                          .min
-                      ) +
-                      " znaków!"
+                    "Hasło musi posiadać 8 znaków w tym jedną literę, jeden znak specjalny oraz jedną liczbę"
                   )
                 ])
               : _vm._e(),
@@ -64644,14 +64616,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!*******************************************!*\
   !*** ./resources/js/views/auth/Login.vue ***!
   \*******************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Login_vue_vue_type_template_id_46ec553e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Login.vue?vue&type=template&id=46ec553e&scoped=true& */ "./resources/js/views/auth/Login.vue?vue&type=template&id=46ec553e&scoped=true&");
 /* harmony import */ var _Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login.vue?vue&type=script&lang=js& */ "./resources/js/views/auth/Login.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -64681,7 +64654,7 @@ component.options.__file = "resources/js/views/auth/Login.vue"
 /*!********************************************************************!*\
   !*** ./resources/js/views/auth/Login.vue?vue&type=script&lang=js& ***!
   \********************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

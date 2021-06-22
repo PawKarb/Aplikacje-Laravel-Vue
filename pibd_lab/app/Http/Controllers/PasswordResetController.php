@@ -24,7 +24,7 @@ class PasswordResetController extends Controller
         $email = $this->resetPasswordService->getEmailFromToken($request->token);
         $user = User::where('email',$email) -> first();
         $request->validate([
-            'password'=> 'required|min:6|confirmed',
+            'password'=> 'required|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/|confirmed',
             'password_confirmation'=> 'required',
             'token' => 'required'
         ]);

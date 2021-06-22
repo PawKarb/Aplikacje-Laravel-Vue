@@ -27,8 +27,10 @@ class UserController extends Controller
             ]);
         if($request->name && !$request->email){
             $user->update($request->only('name','first_name','last_name','address','born_date'));
-        }else if($request->email && !$request->name){
+        }else if(!$request->name && $request->email){
             $user->update($request->only('email','first_name','last_name','address','born_date'));
+        }else if(!$request->name && !$request->email){
+            $user->update($request->only('first_name','last_name','address','born_date'));
         }else{
             $user->update($request->all());
         }
@@ -41,8 +43,8 @@ class UserController extends Controller
     public function updatePassword(Request $request){
         $password = Auth::user()->password;
         $request->validate([
-            'actual_password'=> 'required|min:6',
-            'password'=> 'required|min:6|confirmed',
+            'actual_password'=> 'required|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/',
+            'password'=> 'required|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/|confirmed',
             'password_confirmation'=> 'required',
         ]);
 
